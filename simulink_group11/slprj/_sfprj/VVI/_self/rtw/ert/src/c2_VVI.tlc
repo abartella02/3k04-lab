@@ -1,0 +1,151 @@
+%implements "chartSource" "C"
+%function ChartConfig(block, system) void
+  %createrecord chartConfiguration { ...
+          executeAtInitialization  0 ...
+  }
+  %return chartConfiguration
+%endfunction
+%function ChartDataMap(block, system) void
+  %createrecord ChartDataElements {\
+    NumChartData   19 \
+    ChartDataDefaults {\
+      RecordType   "ChartData"\
+      Dimensions   []\
+      IsTestPoint  0\
+    }\
+    ChartData {\
+      Name         "doneDoubleBufferReInit"\
+      Description  "DoubleBufferInitCheck"\
+      SFName       ""\
+      Path         ""\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "PACE_CHARGE_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "PACE_CHARGE_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "PACE_CHARGE_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "PACE_CHARGE_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "Z_ATR_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "Z_ATR_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "Z_ATR_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "Z_ATR_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "Z_VENT_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "Z_VENT_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "Z_VENT_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "Z_VENT_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "ATR_PACE_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "ATR_PACE_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "ATR_PACE_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "ATR_PACE_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "VENT_PACE_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "VENT_PACE_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "VENT_PACE_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "VENT_PACE_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "PACE_GND_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "PACE_GND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "PACE_GND_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "PACE_GND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "ATR_GND_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "ATR_GND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "ATR_GND_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "ATR_GND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "VENT_GND_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "VENT_GND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "VENT_GND_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "VENT_GND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "FRONTEND_CTRL_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "FRONTEND_CTRL"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "FRONTEND_CTRL_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "FRONTEND_CTRL"\
+      SrcLocation  ""\
+    }\
+  }
+  %return ChartDataElements
+%endfunction
