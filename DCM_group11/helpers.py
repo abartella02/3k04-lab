@@ -1,4 +1,5 @@
 from tkinter import messagebox
+import json
 
 def changeButton(button, style):
     if button['text'] == "Connect":
@@ -7,6 +8,11 @@ def changeButton(button, style):
     else:
         button.configure(text="Connect")
         style.configure('connectionImage.TFrame', background="red")
+    button.update()
+
+def telemetryChangeButton(button, style): #temporary
+    button.configure(text="Connect")
+    style.configure('connectionImage.TFrame', background="red")
     button.update()
 
 def clearFrame(frame): #clear all existing widgets from tkinter frame
@@ -26,7 +32,15 @@ def getParamVals(parameters): #get new parameter values from GUI
         if p != None: #check that parameter is not blank
             cur = p["Spinbox"].get() #get current value from GUI spinbox
             if float(cur) >= p["Range"][0] and float(cur) <= p["Range"][1]: #check if value is in acceptable range
-                p["Values"] = p["Spinbox"].get() #insert new value
+                p["Value"] = float(p["Spinbox"].get()) #insert new value
             else:
                 messagebox.showwarning("Parameter Editor", "Invalid Value for {}".format(p["Name"]))
-                p["Values"] = None #reset current value to noneType
+                p["Value"] = None #reset current value to noneType
+
+def updateParams(parameters):
+    for i in parameters:
+        p = parameters[i]
+        if p != None:
+            p.pop("Spinbox")
+    with open(r"./data/parameters.json", "w") as f: 
+        f.write(json.dumps(parameters, indent=2))

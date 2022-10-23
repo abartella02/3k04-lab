@@ -1,87 +1,101 @@
 {
-    "LowerRateLimit":{
-        "Name":"Lower Range Limit",
-        "Units": "ppm",
-        "Range":[30,175],
-        "Inc":5,
-        "Default":120,
-        "Spinbox": null,
-        "Value":null
-
-    },
-    "UpperRateLimit":{
-        "Name":"Upper Range Limit",
-        "Units": "ppm",
-        "Range":[50,175],
-        "Inc":5,
-        "Default":120,
-        "Spinbox": null,
-        "Value":null
-    },
-    "APulseAmplitude":{
-        "Name":"Atrial Pulse Amplitude",
-        "Units": "V",
-        "Range":[0.5, 7.0],
-        "Inc":0.5,
-        "Default":3.5,
-        "Spinbox": null,
-        "Value":null
-    },
-    "APulseWidth":{
-        "Name":"Atrial Pulse Width",
-        "Units": "ms",
-        "Range":[0.1, 1.9],
-        "Inc":0.1,
-        "Default":0.4,
-        "Spinbox": null,
-        "Value":null
-    },
-    "VPulseAmplitude":{
-        "Name":"Ventricular Pulse Amplitude",
-        "Units": "V",
-        "Range":[0.5, 7.0],
-        "Inc":0.5,
-        "Default":3.5,
-        "Spinbox": null,
-        "Value":null
-    },
-    "VPulseWidth":{
-        "Name":"Ventricular Pulse Width",
-        "Units": "ms",
-        "Range":[0.1, 1.9],
-        "Inc":0.1,
-        "Default":0.4,
-        "Spinbox": null,
-        "Value":null
-    },
-    "ARP":{
-        "Name":"Atrial Refractory Period",
-        "Units": "ms",
-        "Range":[150,500],
-        "Inc":10,
-        "Default":250,
-        "Spinbox": null,
-        "Value":null
-    },
-    "VRP":{
-        "Name":"Ventricular Refractory Period",
-        "Units": "ms",
-        "Range":[150,500],
-        "Inc":10,
-        "Default":320,
-        "Spinbox": null,
-        "Value":null
-    },
-    
-    "PVARP":null,
-    "PVARPExtension":null,
-    "Hysterisis":null,
-    "RateSmoothing":null,
-    "ATRDuration":null,
-    "ATRFallbackMode":null,
-    "ATRFallbackTime":null,
-    "ActivityThreshold":null,
-    "ResponseTime":null,
-    "ResponseFactor":null,
-    "RecoveryTime":null
+  "LowerRateLimit": {
+    "Name": "Lower Range Limit",
+    "Units": "ppm",
+    "Range": [
+      30,
+      175
+    ],
+    "Inc": 5,
+    "Default": 120,
+    "Value": 105.0
+  },
+  "UpperRateLimit": {
+    "Name": "Upper Range Limit",
+    "Units": "ppm",
+    "Range": [
+      50,
+      175
+    ],
+    "Inc": 5,
+    "Default": 120,
+    "Value": 120.0
+  },
+  "APulseAmplitude": {
+    "Name": "Atrial Pulse Amplitude",
+    "Units": "V",
+    "Range": [
+      0.5,
+      7.0
+    ],
+    "Inc": 0.5,
+    "Default": 3.5,
+    "Value": 3.5
+  },
+  "APulseWidth": {
+    "Name": "Atrial Pulse Width",
+    "Units": "ms",
+    "Range": [
+      0.1,
+      1.9
+    ],
+    "Inc": 0.1,
+    "Default": 0.4,
+    "Value": 0.4
+  },
+  "VPulseAmplitude": {
+    "Name": "Ventricular Pulse Amplitude",
+    "Units": "V",
+    "Range": [
+      0.5,
+      7.0
+    ],
+    "Inc": 0.5,
+    "Default": 3.5,
+    "Value": 3.5
+  },
+  "VPulseWidth": {
+    "Name": "Ventricular Pulse Width",
+    "Units": "ms",
+    "Range": [
+      0.1,
+      1.9
+    ],
+    "Inc": 0.1,
+    "Default": 0.4,
+    "Value": 0.4
+  },
+  "ARP": {
+    "Name": "Atrial Refractory Period",
+    "Units": "ms",
+    "Range": [
+      150,
+      500
+    ],
+    "Inc": 10,
+    "Default": 250,
+    "Value": 250.0
+  },
+  "VRP": {
+    "Name": "Ventricular Refractory Period",
+    "Units": "ms",
+    "Range": [
+      150,
+      500
+    ],
+    "Inc": 10,
+    "Default": 320,
+    "Value": 320.0
+  },
+  "PVARP": null,
+  "PVARPExtension": null,
+  "Hysterisis": null,
+  "RateSmoothing": null,
+  "ATRDuration": null,
+  "ATRFallbackMode": null,
+  "ATRFallbackTime": null,
+  "ActivityThreshold": null,
+  "ResponseTime": null,
+  "ResponseFactor": null,
+  "RecoveryTime": null
 }
