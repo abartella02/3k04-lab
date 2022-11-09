@@ -69,17 +69,19 @@ def mainPage():
         print('opened file')
         parameters = json.load(f)
     
+    spin = {}
     row = 1
     for i in parameters:
         p = parameters[i] #iterating through a dictionary
         if p != None:
-            p["Spinbox"] = ttk.Spinbox(paramTab, #create spinbox widget
+            spinbox = ttk.Spinbox(paramTab, #create spinbox widget
                 from_=p["Range"][0],
                 to=p["Range"][1],
                 increment=p["Inc"]
                 )
-            p["Spinbox"].insert(0, p["Default"])
-            p["Spinbox"].grid(row=row, column=1, padx=5, pady=5)
+            spin[p["Name"]] = spinbox
+            spinbox.insert(0, p["Default"])
+            spinbox.grid(row=row, column=1, padx=5, pady=5)
             ttk.Label(paramTab, #create label widget for spinbox
                 text="{} ({})".format(p["Name"], p["Units"]), 
                 font=("Calibri, 10")
@@ -91,7 +93,7 @@ def mainPage():
     applyButton = ttk.Button(paramTab, #"apply" button at bottom of page
         text="Apply",
         command=lambda: [
-            getParamVals(parameters), #collect values inside spinbox widgets (see otherfuncs.py)
+            getParamVals(parameters, spin), #collect values inside spinbox widgets (see otherfuncs.py)
             print("Parameters Applied"),
             updateParams(newdict)
             ]

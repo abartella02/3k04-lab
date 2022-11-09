@@ -8,7 +8,8 @@
     ],
     "Inc": 5,
     "Default": 120,
-    "Value": 105.0
+    "Value": 120.0,
+    "Spinbox": null
   },
   "UpperRateLimit": {
     "Name": "Upper Range Limit",
@@ -19,7 +20,8 @@
     ],
     "Inc": 5,
     "Default": 120,
-    "Value": 120.0
+    "Value": 120.0,
+    "Spinbox": null
   },
   "APulseAmplitude": {
     "Name": "Atrial Pulse Amplitude",
@@ -30,7 +32,8 @@
     ],
     "Inc": 0.5,
     "Default": 3.5,
-    "Value": 3.5
+    "Value": 3.5,
+    "Spinbox": null
   },
   "APulseWidth": {
     "Name": "Atrial Pulse Width",
@@ -41,7 +44,8 @@
     ],
     "Inc": 0.1,
     "Default": 0.4,
-    "Value": 0.4
+    "Value": 0.4,
+    "Spinbox": null
   },
   "VPulseAmplitude": {
     "Name": "Ventricular Pulse Amplitude",
@@ -52,7 +56,8 @@
     ],
     "Inc": 0.5,
     "Default": 3.5,
-    "Value": 3.5
+    "Value": 3.5,
+    "Spinbox": null
   },
   "VPulseWidth": {
     "Name": "Ventricular Pulse Width",
@@ -63,7 +68,8 @@
     ],
     "Inc": 0.1,
     "Default": 0.4,
-    "Value": 0.4
+    "Value": 0.4,
+    "Spinbox": null
   },
   "ARP": {
     "Name": "Atrial Refractory Period",
@@ -74,7 +80,8 @@
     ],
     "Inc": 10,
     "Default": 250,
-    "Value": 250.0
+    "Value": 250.0,
+    "Spinbox": null
   },
   "VRP": {
     "Name": "Ventricular Refractory Period",
@@ -85,7 +92,8 @@
     ],
     "Inc": 10,
     "Default": 320,
-    "Value": 320.0
+    "Value": 350.0,
+    "Spinbox": null
   },
   "PVARP": null,
   "PVARPExtension": null,

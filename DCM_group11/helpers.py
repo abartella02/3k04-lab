@@ -26,21 +26,18 @@ def checkEmptyCredentials(username, password): #check if login info is blank
     if username == '' or password == '':
         return True
 
-def getParamVals(parameters): #get new parameter values from GUI
+def getParamVals(parameters, spin): #get new parameter values from GUI
     for i in parameters: #iterating through dictionary
         p = parameters[i]
         if p != None: #check that parameter is not blank
-            cur = p["Spinbox"].get() #get current value from GUI spinbox
+            print(p["Name"])
+            cur = spin[p["Name"]].get() #get current value from GUI spinbox
             if float(cur) >= p["Range"][0] and float(cur) <= p["Range"][1]: #check if value is in acceptable range
-                p["Value"] = float(p["Spinbox"].get()) #insert new value
+                p["Value"] = float(cur) #insert new value
             else:
                 messagebox.showwarning("Parameter Editor", "Invalid Value for {}".format(p["Name"]))
                 p["Value"] = None #reset current value to noneType
 
 def updateParams(parameters):
-    for i in parameters:
-        p = parameters[i]
-        if p != None:
-            p.pop("Spinbox")
     with open(r"./data/parameters.json", "w") as f: 
         f.write(json.dumps(parameters, indent=2))
