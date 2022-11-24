@@ -1,5 +1,6 @@
 import json
 from helpers import *
+import os
 
 import tkinter
 from ttkthemes import themed_tk as tk
@@ -9,7 +10,7 @@ from tkinter import Button, IntVar, ttk,messagebox, font
 
 #note to self: add confirmation message popup to "delete user" section
 
-def mainPage():
+def mainPage(userinfo):
     clearFrame(masterFrame)
     root.minsize(330, 320)
 
@@ -65,7 +66,7 @@ def mainPage():
     telemetryLostButton.grid(row=2, column=0, pady=(10,0))
     
     #Parameters tab widgets
-    with open(r"./data/parameters.json", "r") as f: #getting parameter attributes from json file
+    with open(userinfo['filepath'], "r") as f: #getting parameter attributes from json file
         print('opened file')
         parameters = json.load(f)
     
@@ -80,7 +81,10 @@ def mainPage():
                 increment=p["Inc"]
                 )
             spin[p["Name"]] = spinbox
-            spinbox.insert(0, p["Default"])
+            if not p["Value"]:
+                spinbox.insert(0, p["Default"])
+            else:
+                spinbox.insert(0, p["Value"])
             spinbox.grid(row=row, column=1, padx=5, pady=5)
             ttk.Label(paramTab, #create label widget for spinbox
                 text="{} ({})".format(p["Name"], p["Units"]), 
@@ -95,7 +99,7 @@ def mainPage():
         command=lambda: [
             getParamVals(parameters, spin), #collect values inside spinbox widgets (see otherfuncs.py)
             print("Parameters Applied"),
-            updateParams(newdict)
+            updateParams(newdict, userinfo)
             ]
         )
     applyButton.grid(row=row, column=1, padx=5, pady=5, ipadx=10)
@@ -110,6 +114,8 @@ def deleteAccount(username):
     for index, object in enumerate(data): #iterating through login information
         if object['username'] == username: #searching for selected username
             print('found') ##
+            filepath = object['filepath']
+            os.remove(filepath)
             data.pop(index) #deleting specified login info
 
     with open(r"./data/userpass.json", "w") as f: 
@@ -126,7 +132,13 @@ def newAccount(username, password):
     with open(r"./data/userpass.json", "r") as f: #get existing login info from json file
         print('opened file') ##
         data = json.load(f)
-    data.append({'username':username, 'password':password}) #adding new username and password
+
+    filepath = r"./data/userdata/{}.json".format(username)
+    with open(filepath, "w") as userfile: #create new template for data
+        with open(r"./data/parametersBlank.json") as template:
+            userfile.write(json.dumps(json.load(template), indent=2))
+
+    data.append({'username':username, 'password':password, 'filepath':filepath}) #adding new username and password
 
     with open(r"./data/userpass.json", "w") as f: 
         f.write(json.dumps(data, indent=2)) #updating json file
@@ -210,14 +222,14 @@ def login(userEnter, passEnter): #login button command
         if i['username'] == userEnter and i['password'] == passEnter: #search for matching username AND password
             userPassFound = True #login info found
             messagebox.showinfo("Login", "Login Successful!")
-            mainPage() #go to mainpage
+            mainPage(i) #go to mainpage
             return
     if not userPassFound: 
         messagebox.askretrycancel("Login", "Login Unsuccessful.\nUsername or password not found.\nPlease Try Again.")
 
 
 def createNewUser(userEnter, passEnter): #new user button command
-    if checkEmptyCredentials(userEnter, passEnter): #see otherfuncs.py
+    if checkEmptyCredentials(userEnter, passEnter) and checkInvalidChars(userEnter): #see otherfuncs.py
         messagebox.showwarning("Login", "Enter a Username and Password.")
         return 
     UserAlreadyExists = False
@@ -303,7 +315,7 @@ def main():
     global masterFrame
     global maxUsers
     global theme
-    maxUsers = 10
+    maxUsers = 2
     #create tkinter window instance
     theme = "scidblue"
     root = tk.ThemedTk()

@@ -26,6 +26,18 @@ def checkEmptyCredentials(username, password): #check if login info is blank
     if username == '' or password == '':
         return True
 
+def checkInvalidChars(username):
+    invalidStrs = ['&', '=', '_', '+', ',', '<', '>', 
+        '..', '/', '\\', '\'', '"', '$', '\#', '!', 
+        '(', ')', '*', ':', ';', '@', '[', ']', '^', 
+        '`', '{', '|', '}', '~']
+
+    for i in invalidStrs:
+        if i in username:
+            return False
+    return True
+
+
 def getParamVals(parameters, spin): #get new parameter values from GUI
     for i in parameters: #iterating through dictionary
         p = parameters[i]
@@ -38,6 +50,6 @@ def getParamVals(parameters, spin): #get new parameter values from GUI
                 messagebox.showwarning("Parameter Editor", "Invalid Value for {}".format(p["Name"]))
                 p["Value"] = None #reset current value to noneType
 
-def updateParams(parameters):
-    with open(r"./data/parameters.json", "w") as f: 
+def updateParams(parameters, userinfo):
+    with open(userinfo["filepath"], "w") as f: 
         f.write(json.dumps(parameters, indent=2))

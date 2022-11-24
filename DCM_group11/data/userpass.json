@@ -1,22 +1,7 @@
 [
   {
-    "password": "bartella",
-    "username": "alex"
-  },
-  {
-    "username": "username",
-    "password": "pass"
-  },
-  {
-    "username": "tommyboy",
-    "password": "password"
-  },
-  {
-    "username": "jason",
-    "password": "derulo"
-  },
-  {
     "username": "alexander",
-    "password": "bartella"
+    "password": "bartella",
+    "filepath": "./data/userdata/alexander.json"
   }
 ]
