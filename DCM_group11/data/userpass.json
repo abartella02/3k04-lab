@@ -1,7 +1,12 @@
 [
   {
-    "username": "alexander",
+    "username": "alex",
     "password": "bartella",
-    "filepath": "./data/userdata/alexander.json"
+    "filepath": "./data/userdata/alex.json"
+  },
+  {
+    "username": "jordan",
+    "password": "bartella",
+    "filepath": "./data/userdata/jordan.json"
   }
 ]

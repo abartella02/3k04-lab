@@ -1,6 +1,7 @@
 import json
 from helpers import *
 import os
+from serialcomm import main as serialComm
 
 import tkinter
 from ttkthemes import themed_tk as tk
@@ -42,19 +43,18 @@ def mainPage(userinfo):
         ]
         )
     
-    telemetryLostButton = ttk.Button( #temporary
-        mainTab,
-        text="Simulate Lost telemetry",
-        command=lambda:[
-            messagebox.showwarning("Connect", "Telemetry Lost!"),
-            telemetryChangeButton(connectButton, imageStyle),
-            print("Telemetry Lost")
-        ]
-    )
-    
     connectionImage = ttk.Frame( #connection status indicator
         statusFrame, 
         style="connectionImage.TFrame"
+        )
+
+    sendButton = ttk.Button( #send data button
+        mainTab, 
+        text="Send Data to Pacemaker",
+        command=lambda:[
+            messagebox.showinfo("Connect", "Parameters Sent!"),
+            serialComm()
+        ]
         )
     
     #placing widgets on main page
@@ -63,22 +63,52 @@ def mainPage(userinfo):
     connectionImage.grid(row=0, column=1, ipadx=5, ipady=5, padx=3, pady=3)
 
     connectButton.grid(row=1, column=0)
-    telemetryLostButton.grid(row=2, column=0, pady=(10,0))
+    paramFrame = ttk.Frame(paramTab)
+
+    optionsFrame = ttk.Frame(paramTab)
+    options = ["Select a mode", "AOO", "VOO", "AAI", "VVI"]
+    value = tkinter.StringVar(optionsFrame)
+    dropdown = ttk.OptionMenu(optionsFrame, 
+        value,
+        *options
+        )
+    optionsFrame.grid(row=0, column=0, sticky='w')
+    dropdown.grid(row=0, column=0, sticky='w')
+    paramFrame.grid(row=1, column=0)
     
-    #Parameters tab widgets
-    with open(userinfo['filepath'], "r") as f: #getting parameter attributes from json file
-        print('opened file')
+    optionButton = ttk.Button(optionsFrame,
+        text="Select",
+        command=lambda: (
+            currentMode := value.get(),
+            spawnParams(currentMode, paramFrame, userinfo)
+            )
+    )
+    optionButton.grid(row=0, column=1, sticky='w', ipadx=4)
+
+def spawnParams(currentMode, frame, userinfo):
+    clearFrame(frame)
+    with open(userinfo["filepath"], "r") as f:
         parameters = json.load(f)
-    
+
+    with open(r"./data/modes.json", "r") as f:
+        modes = json.load(f)
+
+    try:
+        reqParams = modes[currentMode]
+    except:
+        messagebox.showerror("Error", "Invalid Mode!!!")
+        return
+
+    widgets = []
+    for paramKey in reqParams:
+        widgets.append(parameters[paramKey])
+        
     spin = {}
-    row = 1
-    for i in parameters:
-        p = parameters[i] #iterating through a dictionary
+    row = 2
+    for p in widgets:
         if p != None:
-            spinbox = ttk.Spinbox(paramTab, #create spinbox widget
-                from_=p["Range"][0],
-                to=p["Range"][1],
-                increment=p["Inc"]
+            spinbox = ttk.Spinbox(frame, #create spinbox widget
+                values=p['Range']
                 )
             spin[p["Name"]] = spinbox
             if not p["Value"]:
@@ -86,7 +116,7 @@ def mainPage(userinfo):
             else:
                 spinbox.insert(0, p["Value"])
             spinbox.grid(row=row, column=1, padx=5, pady=5)
-            ttk.Label(paramTab, #create label widget for spinbox
+            ttk.Label(frame, #create label widget for spinbox
                 text="{} ({})".format(p["Name"], p["Units"]), 
                 font=("Calibri, 10")
                 ).grid(row=row, column=0, padx=5, pady=5, sticky="w")
@@ -94,10 +124,10 @@ def mainPage(userinfo):
     
     newdict = parameters.copy()
 
-    applyButton = ttk.Button(paramTab, #"apply" button at bottom of page
+    applyButton = ttk.Button(frame, #"apply" button at bottom of page
         text="Apply",
         command=lambda: [
-            getParamVals(parameters, spin), #collect values inside spinbox widgets (see otherfuncs.py)
+            getParamVals(parameters, spin, widgets), #collect values inside spinbox widgets (see otherfuncs.py)
             print("Parameters Applied"),
             updateParams(newdict, userinfo)
             ]
@@ -213,13 +243,15 @@ def maxUsersReached():
 def login(userEnter, passEnter): #login button command
     if checkEmptyCredentials(userEnter, passEnter): #see otherfuncs.py
         messagebox.showwarning("Login", "Enter a valid Username and Password.")
-        return 
+        return
+    userEnter = userEnter.lower()
+    passEnter = passEnter.lower()
     print('Success') ##
     userPassFound = False
     with open(r"./data/userpass.json", "r") as f:
         data = json.load(f) #get login info from json file
     for i in data:
-        if i['username'] == userEnter and i['password'] == passEnter: #search for matching username AND password
+        if i['username'].lower() == userEnter and i['password'].lower() == passEnter: #search for matching username AND password
             userPassFound = True #login info found
             messagebox.showinfo("Login", "Login Successful!")
             mainPage(i) #go to mainpage
@@ -232,11 +264,13 @@ def createNewUser(userEnter, passEnter): #new user button command
     if checkEmptyCredentials(userEnter, passEnter) and checkInvalidChars(userEnter): #see otherfuncs.py
         messagebox.showwarning("Login", "Enter a Username and Password.")
         return 
+    userEnter = userEnter.lower()
+    passEnter = passEnter.lower()
     UserAlreadyExists = False
     with open(r"./data/userpass.json", "r") as f:
         data = json.load(f) #get login info from json file
     for i in data: #iterate through login info to check if user already exists
-        if i['username'] == userEnter:
+        if i['username'].lower() == userEnter:
             UserAlreadyExists = True
             messagebox.askretrycancel("New User", "Username already exists!")
             return
@@ -274,7 +308,10 @@ def loginPage(): #login page
         buttonFrame,
         text="CREATE NEW",
         style="enter.TButton",
-        command= lambda: createNewUser(userBox.get(), passBox.get()) #new user function call
+        command= lambda: [
+            createNewUser(userBox.get(), passBox.get()),
+            login(userBox.get(), passBox.get())
+        ] #new user function call
     )
     
     titleLabel.grid(row=0, column=0) #inserting widgets

@@ -10,11 +10,6 @@ def changeButton(button, style):
         style.configure('connectionImage.TFrame', background="red")
     button.update()
 
-def telemetryChangeButton(button, style): #temporary
-    button.configure(text="Connect")
-    style.configure('connectionImage.TFrame', background="red")
-    button.update()
-
 def clearFrame(frame): #clear all existing widgets from tkinter frame
     try:
         for i in frame.winfo_children(): #iterating through widgets
@@ -38,14 +33,14 @@ def checkInvalidChars(username):
     return True
 
 
-def getParamVals(parameters, spin): #get new parameter values from GUI
+def getParamVals(parameters, spin, widgets): #get new parameter values from GUI
     for i in parameters: #iterating through dictionary
         p = parameters[i]
-        if p != None: #check that parameter is not blank
+        if p in widgets: #check that parameter is not blank
             print(p["Name"])
             cur = spin[p["Name"]].get() #get current value from GUI spinbox
-            if float(cur) >= p["Range"][0] and float(cur) <= p["Range"][1]: #check if value is in acceptable range
-                p["Value"] = float(cur) #insert new value
+            if float(cur) in p['Range']: #check if value is in acceptable range
+                p["Value"] = float(cur)
             else:
                 messagebox.showwarning("Parameter Editor", "Invalid Value for {}".format(p["Name"]))
                 p["Value"] = None #reset current value to noneType
