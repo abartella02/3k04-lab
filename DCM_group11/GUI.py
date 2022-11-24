@@ -212,7 +212,7 @@ def maxUsersReached():
 
 def login(userEnter, passEnter): #login button command
     if checkEmptyCredentials(userEnter, passEnter): #see otherfuncs.py
-        messagebox.showwarning("Login", "Enter a Username and Password.")
+        messagebox.showwarning("Login", "Enter a valid Username and Password.")
         return 
     print('Success') ##
     userPassFound = False
