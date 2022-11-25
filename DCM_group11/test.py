@@ -1,27 +1,33 @@
-import json
-from helpers import *
-import os
+# import modules
+import threading as T
+import time
+ 
 
-import tkinter
-from ttkthemes import themed_tk as tk
-from tkinter import Button, IntVar, ttk,messagebox, font
+global x
+x = 1
+# creating a function
+def checkConnection():
+    while True:
+        global x
+        if x == 1:
+            print("Connected")
+        else:
+            print("Not connected")
+        time.sleep(1)
+ 
+# creating a thread
 
-selectedMode = "VVI"
-
-with open(r"./data/parametersBlank.json", "r") as f:
-    parameters = json.load(f)
-
-with open(r"./data/modes.json", "r") as f:
-    modes = json.load(f)
-
-for mode in modes.keys():
-    pass
-
-try:
-    reqParams = modes[selectedMode]
-except:
-    pass
-
-widgets = []
-for paramKey in reqParams:
-    widgets.append(parameters[paramKey])
+t = T.Thread(target = checkConnection, daemon=True, name="Monitor")
+ 
+# change T to daemon
+#T.setDaemon(True)  
+ 
+# starting of Thread T
+print("Starting BG task")
+t.start()                          
+time.sleep(5)
+x = 0
+time.sleep(2)
+x = 1
+time.sleep(3)
+print('this is Main Thread') 

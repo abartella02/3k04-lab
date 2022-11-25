@@ -47,15 +47,6 @@ def mainPage(userinfo):
         statusFrame, 
         style="connectionImage.TFrame"
         )
-
-    sendButton = ttk.Button( #send data button
-        mainTab, 
-        text="Send Data to Pacemaker",
-        command=lambda:[
-            messagebox.showinfo("Connect", "Parameters Sent!"),
-            serialComm()
-        ]
-        )
     
     #placing widgets on main page
     statusFrame.grid(row=0, column=0, sticky='NESW')
@@ -76,6 +67,8 @@ def mainPage(userinfo):
     dropdown.grid(row=0, column=0, sticky='w')
     paramFrame.grid(row=1, column=0)
     
+
+    currentMode = ""
     optionButton = ttk.Button(optionsFrame,
         text="Select",
         command=lambda: (
@@ -84,6 +77,15 @@ def mainPage(userinfo):
             )
     )
     optionButton.grid(row=0, column=1, sticky='w', ipadx=4)
+
+    sendButton = ttk.Button( #send data button
+    mainTab, 
+    text="Send Data to Pacemaker",
+    command=lambda:[
+        messagebox.showinfo("Connect", "Parameters Sent!"),
+        serialComm(userinfo, currentMode)
+    ]
+    )
 
 def spawnParams(currentMode, frame, userinfo):
     clearFrame(frame)
@@ -250,11 +252,11 @@ def login(userEnter, passEnter): #login button command
     userPassFound = False
     with open(r"./data/userpass.json", "r") as f:
         data = json.load(f) #get login info from json file
-    for i in data:
-        if i['username'].lower() == userEnter and i['password'].lower() == passEnter: #search for matching username AND password
+    for userinfo in data:
+        if userinfo['username'].lower() == userEnter and userinfo['password'].lower() == passEnter: #search for matching username AND password
             userPassFound = True #login info found
             messagebox.showinfo("Login", "Login Successful!")
-            mainPage(i) #go to mainpage
+            mainPage(userinfo) #go to mainpage
             return
     if not userPassFound: 
         messagebox.askretrycancel("Login", "Login Unsuccessful.\nUsername or password not found.\nPlease Try Again.")
