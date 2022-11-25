@@ -1,7 +1,8 @@
 import json
 from helpers import *
 import os
-from serialcomm import main as serialComm
+import serialcomm
+from connectioncheck import main as checkConnected
 
 import tkinter
 from ttkthemes import themed_tk as tk
@@ -37,8 +38,9 @@ def mainPage(userinfo):
         mainTab, 
         text="Connect",
         command=lambda:[
-            messagebox.showinfo("Connect", "{}ion Successful".format(connectButton['text'])),
+            #messagebox.showinfo("Connect", "{}ion Successful".format(connectButton['text'])),
             changeButton(connectButton, imageStyle),
+            checkConnected(connectButton, imageStyle),
             print("(Dis)Connection Successful")
         ]
         )
@@ -83,9 +85,21 @@ def mainPage(userinfo):
     text="Send Data to Pacemaker",
     command=lambda:[
         messagebox.showinfo("Connect", "Parameters Sent!"),
-        serialComm(userinfo, currentMode)
+        serialcomm.send(userinfo, currentMode)
     ]
     )
+    sendButton.grid(row=2, column=0)
+
+    getButton = ttk.Button( #send data button
+    mainTab, 
+    text="Get Data from Pacemaker",
+    command=lambda:[
+        messagebox.showinfo("Connect", "Parameters Sent!"),
+        temp := serialcomm.get(userinfo, currentMode),
+        print(json.dumps(temp, indent=1))
+    ]
+    )
+    getButton.grid(row=3, column=0)
 
 def spawnParams(currentMode, frame, userinfo):
     clearFrame(frame)

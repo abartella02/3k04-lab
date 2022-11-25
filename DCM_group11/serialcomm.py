@@ -18,6 +18,7 @@ def findDevice():
     for p in ports:
         if p.vid == data["Vendor ID"] and p.pid == data["Product ID"]:
             return p
+    return None
 
 def getParams(userinfo):
     with open(userinfo["filepath"]) as f:
@@ -94,8 +95,25 @@ def makeSignalSet(mode, parameters):
                 val = 0
             paramDict[n] = int(val)
             signalSet += struct.pack("H", int(val))
-    print("ssssssss",len(signalSet))
+    print("Length of Signal Set:",len(signalSet))
     return signalSet
+
+
+#########################################################################
+def send(userinfo, mode):
+    signalSet = makeSignalSet(mode, getParams(userinfo))
+    with serial.Serial(findDevice().device, 115200) as ser:
+        sendData(ser, signalSet)
+
+def get(userinfo, mode):
+    signalSet = makeSignalSet(mode, getParams(userinfo))
+    try:
+        with serial.Serial(findDevice().device, 115200, timeout = 5) as ser:
+            r = recieveData(ser, signalSet)  
+    except:
+        r = None
+
+    return r  
 
 def main(userinfo, mode):
     device = findDevice()
@@ -108,10 +126,6 @@ def main(userinfo, mode):
 
     signalSet = makeSignalSet(mode, parameters)
 
-    #print(paramDict)
-    #print(signalSet)
-    #strParamList = str(paramList).encode("utf-8")
-    #print("Byte array:", strParamList)
 
     with serial.Serial(device.device, 115200) as ser:
         print("Port open?", ser.is_open) #port is open
@@ -127,6 +141,4 @@ with open(r"./data/userpass.json", "r") as f:
     data = json.load(f)
 data = data[0]
 
-
-main(data, "VOO")
 

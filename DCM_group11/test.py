@@ -1,6 +1,7 @@
 # import modules
 import threading as T
 import time
+import serial
  
 
 global x
@@ -8,6 +9,7 @@ x = 1
 # creating a function
 def checkConnection():
     while True:
+
         global x
         if x == 1:
             print("Connected")
@@ -27,7 +29,8 @@ print("Starting BG task")
 t.start()                          
 time.sleep(5)
 x = 0
+print(t)
 time.sleep(2)
 x = 1
 time.sleep(3)
-print('this is Main Thread') 
+print('this is Main Thread end') 

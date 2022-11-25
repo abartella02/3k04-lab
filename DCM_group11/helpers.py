@@ -1,5 +1,30 @@
 from tkinter import messagebox
 import json
+from serialcomm import findDevice
+import threading as T
+import time
+
+
+
+def checkConnectionDaemon(button):
+    global STATUS
+    STATUS = 1
+    while True:
+        status = findDevice()
+        if status == None:
+            STATUS = 0
+            return
+    
+
+def checkConnection(button):
+    global STATUS
+    t = T.Thread(target = checkConnectionDaemon, daemon=True, name="Monitor")
+    if button["text"] == "Disconnect":
+        t.start()
+        if STATUS == 0:
+            print("disconnected")
+            return False
+    
 
 def changeButton(button, style):
     if button['text'] == "Connect":
