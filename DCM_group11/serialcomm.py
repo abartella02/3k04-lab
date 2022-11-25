@@ -25,33 +25,33 @@ def getParams(userinfo):
     return parameters
 
 def sendData(ser, signalSet):
-    ser.write(b'\x16\x55'+signalSet)
+    ser.write(b'\x16' + b'\x55' + signalSet)
 
 def recieveData(ser, signalSet):
     print("enter")
-    ser.write(b'\x16\x22'+signalSet) #start, sync, signal
+    ser.write(b'\x16' + b'\x22' + signalSet) #start, sync, signal
 
     rec = {}
     a = None
     print("read start")
-    data = ser.read(63)
+    data = ser.read(64)
     print("read end")
-    rec["MODE"] = data[0]
-    rec["LRL"] = struct.unpack("H", data[1:3])[0]
-    rec["URL"] = struct.unpack("H", data[3:5])[0]
+    rec["MODE"] = struct.unpack("H", data[0:2])[0]
+    rec["LRL"] = struct.unpack("H", data[2:4])[0]
+    rec["URL"] = struct.unpack("H", data[4:6])[0]
 
-    rec["AA"] = struct.unpack("d", data[5:13])[0]
-    rec["VA"] = struct.unpack("d", data[13:21])[0]
-    rec["APW"] = struct.unpack("d", data[21:29])[0]
-    rec["VPW"] = struct.unpack("d", data[29:37])[0]
-    rec["AS"] = struct.unpack("d", data[37:45])[0]
-    rec["VS"] = struct.unpack("d", data[45:53])[0]
+    rec["AA"] = struct.unpack("d", data[6:14])[0]
+    rec["VA"] = struct.unpack("d", data[14:22])[0]
+    rec["APW"] = struct.unpack("d", data[22:30])[0]
+    rec["VPW"] = struct.unpack("d", data[30:38])[0]
+    rec["AS"] = struct.unpack("d", data[38:46])[0]
+    rec["VS"] = struct.unpack("d", data[46:54])[0]
 
-    rec["VRP"] = struct.unpack("H", data[53:55])[0]
-    rec["ARP"] = struct.unpack("H", data[55:57])[0]
-    rec["PVARP"] = struct.unpack("H", data[57:59])[0]
-    rec["HYS"] = struct.unpack("H", data[59:61])[0]
-    rec["RS"] = struct.unpack("H", data[61:63])[0]
+    rec["VRP"] = struct.unpack("H", data[54:56])[0]
+    rec["ARP"] = struct.unpack("H", data[56:58])[0]
+    rec["PVARP"] = struct.unpack("H", data[58:60])[0]
+    rec["HYS"] = struct.unpack("H", data[60:62])[0]
+    rec["RS"] = struct.unpack("H", data[62:64])[0]
     ser.close()
     print("Port open?", ser.is_open)
 
@@ -74,15 +74,16 @@ def makeSignalSet(mode, parameters):
     elif mode == "VVI":
         modeNum = 4
 
-    paramDict["Mode"] = (int(modeNum))
+    paramDict["Mode"] = int(modeNum)
     #bModeNum = '{}'.format(modeNum)
-    signalSet = bytes(str(modeNum).encode())
-    print("Mode signal Set:", str(modeNum).encode())
+    signalSet = struct.pack("H", modeNum)
+    print("Mode signal Set:", signalSet)
 
     for key in parameters.keys():
         p = parameters[key]
         n = p["Name"]
         val = p["Value"]
+        print(n)
         if  n == "Atrial Pulse Amplitude" or n == "Ventricular Pulse Amplitude" or n == "Atrial Pulse Width" or n == "Ventricular Pulse Width" or n == "Atrial Sensitivity" or n == "Ventricular Sensitivity":
             if val == None:
                 val = 0
@@ -93,6 +94,7 @@ def makeSignalSet(mode, parameters):
                 val = 0
             paramDict[n] = int(val)
             signalSet += struct.pack("H", int(val))
+    print("ssssssss",len(signalSet))
     return signalSet
 
 def main(userinfo, mode):
@@ -111,11 +113,10 @@ def main(userinfo, mode):
     #strParamList = str(paramList).encode("utf-8")
     #print("Byte array:", strParamList)
 
-
     with serial.Serial(device.device, 115200) as ser:
         print("Port open?", ser.is_open) #port is open
         print("SignalSet:", signalSet)
-        #sendData(ser, signalSet)
+        sendData(ser, signalSet)
         #print("***Data sent")
         recieveData(ser, signalSet)
         print("***Data recieved")

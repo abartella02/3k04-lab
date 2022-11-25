@@ -3,5 +3,10 @@
     "username": "alex",
     "password": "bartella",
     "filepath": "./data/userdata/alex.json"
+  },
+  {
+    "username": "w",
+    "password": "w",
+    "filepath": "./data/userdata/w.json"
   }
 ]
