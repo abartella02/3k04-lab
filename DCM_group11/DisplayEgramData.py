@@ -1,3 +1,5 @@
+#initial framework for displaying Egram Data from pacemaker
+
 import matplotlib.pyplot as graph
 import random #remove after we have real data (was only used for testing)
 
