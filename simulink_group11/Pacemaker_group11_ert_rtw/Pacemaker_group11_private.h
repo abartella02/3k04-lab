@@ -3,22 +3,24 @@
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * File: Send_DCM.h
+ * File: Pacemaker_group11_private.h
  *
  * Code generated for Simulink model 'Pacemaker_group11'.
  *
  * Model version                  : 1.99
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
  * C/C++ source code generated on : Sat Nov 26 03:40:39 2022
+ *
+ * Target selection: ert.tlc
+ * Embedded hardware selection: ARM Compatible->ARM Cortex
+ * Code generation objectives: Unspecified
+ * Validation result: Not run
  */
 
-#ifndef RTW_HEADER_Send_DCM_h_
-#define RTW_HEADER_Send_DCM_h_
-#include <string.h>
-
-extern void Send_DCM(void);
-
-#endif                                 /* RTW_HEADER_Send_DCM_h_ */
+#ifndef RTW_HEADER_Pacemaker_group11_private_h_
+#define RTW_HEADER_Pacemaker_group11_private_h_
+#include "rtwtypes.h"
+#endif                             /* RTW_HEADER_Pacemaker_group11_private_h_ */
 
 /*
  * File trailer for generated code.

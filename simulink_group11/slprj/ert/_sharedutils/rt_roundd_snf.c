@@ -3,7 +3,7 @@
  * course requirements at degree granting institutions only.  Not for
  * government, commercial, or other organizational use.
  *
- * File: Send_DCM.h
+ * File: rt_roundd_snf.c
  *
  * Code generated for Simulink model 'Pacemaker_group11'.
  *
@@ -12,13 +12,27 @@
  * C/C++ source code generated on : Sat Nov 26 03:40:39 2022
  */
 
-#ifndef RTW_HEADER_Send_DCM_h_
-#define RTW_HEADER_Send_DCM_h_
-#include <string.h>
+#include "rtwtypes.h"
+#include "rt_roundd_snf.h"
+#include <math.h>
 
-extern void Send_DCM(void);
+real_T rt_roundd_snf(real_T u)
+{
+  real_T y;
+  if (fabs(u) < 4.503599627370496E+15) {
+    if (u >= 0.5) {
+      y = floor(u + 0.5);
+    } else if (u > -0.5) {
+      y = u * 0.0;
+    } else {
+      y = ceil(u - 0.5);
+    }
+  } else {
+    y = u;
+  }
 
-#endif                                 /* RTW_HEADER_Send_DCM_h_ */
+  return y;
+}
 
 /*
  * File trailer for generated code.

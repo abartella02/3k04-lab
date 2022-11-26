@@ -121,6 +121,9 @@ def recieveSignal(userinfo):
 
             atr = float(struct.unpack("d", data[0:8])[0])
             vent = float(struct.unpack("d", data[8:16])[0])
+
+            print(atr)
+            print(vent)
     except:
         print("Signal get timeout")
     return (atr, vent)
