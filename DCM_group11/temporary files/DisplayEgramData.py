@@ -7,7 +7,7 @@ x = [] #x-axis
 y = [] #y-axis
 t = 0.0 #time
 
-for i in range(69): #range will change depending on number of inputs
+for i in range(50): #range will change depending on number of inputs
     x.append(t)
     t += 0.001 #setting up x axis (change 1ms to whatever correct sampling interval)
     data = random.randint(0,30) #replace this with sampling data
