@@ -3,6 +3,7 @@ import serial.tools.list_ports
 import json
 import time
 import struct
+from tkinter import messagebox
 
 
 def findDevice():
@@ -20,7 +21,7 @@ def findDevice():
             return p
     return None
 
-def getParams(userinfo):
+def getParamData(userinfo):
     with open(userinfo["filepath"]) as f:
         parameters = json.load(f)
     return parameters
@@ -28,12 +29,13 @@ def getParams(userinfo):
 def sendData(ser, signalSet):
     ser.write(b'\x16' + b'\x55' + signalSet)
 
-def recieveData(ser, signalSet):
+    messagebox.showinfo("Connect", "Parameters Sent!")
+
+def recieveParams(ser, signalSet):
     print("enter")
     ser.write(b'\x16' + b'\x22' + signalSet) #start, sync, signal
 
     rec = {}
-    a = None
     print("read start")
     data = ser.read(64)
     print("read end")
@@ -53,14 +55,12 @@ def recieveData(ser, signalSet):
     rec["PVARP"] = struct.unpack("H", data[58:60])[0]
     rec["HYS"] = struct.unpack("H", data[60:62])[0]
     rec["RS"] = struct.unpack("H", data[62:64])[0]
-    ser.close()
-    print("Port open?", ser.is_open)
-
-    for key in rec.keys():
-        print(key, rec[key])
-
+    
+    if len(rec) != 0:
+        messagebox.showinfo("Connect", "Parameters Recieved!")
+    else:
+        messagebox.showinfo("Connect", "An error occured when reading from pacemaker")
     return rec
-
 
 def makeSignalSet(mode, parameters):
     paramDict = {}
@@ -76,7 +76,7 @@ def makeSignalSet(mode, parameters):
         modeNum = 4
 
     paramDict["Mode"] = int(modeNum)
-    #bModeNum = '{}'.format(modeNum)
+
     signalSet = struct.pack("H", modeNum)
     print("Mode signal Set:", signalSet)
 
@@ -99,34 +99,54 @@ def makeSignalSet(mode, parameters):
     return signalSet
 
 
+
+
 #########################################################################
-def send(userinfo, mode):
+
+def recieveSignal(ser, signalSet):
+    print("enter")
+    ser.write(b'\x16' + b'\x33' + signalSet) #start, sync, signal
+
+    data = ser.read(64)
+
+    atr = None
+    vent = None
+
+    atr = struct.unpack("d", data[0:8])[0]
+    vent = struct.unpack("d", data[8:16])[0]
+
+    return (atr, vent)
+
+def sendParams(userinfo, mode):
     signalSet = makeSignalSet(mode, getParams(userinfo))
     with serial.Serial(findDevice().device, 115200) as ser:
         sendData(ser, signalSet)
 
-def get(userinfo, mode):
+def getParams(userinfo, mode):
     signalSet = makeSignalSet(mode, getParams(userinfo))
     try:
         with serial.Serial(findDevice().device, 115200, timeout = 5) as ser:
-            r = recieveData(ser, signalSet)  
+            r = recieveParams(ser, signalSet)  
     except:
         r = None
+    return r
 
-    return r  
+
 
 def main(userinfo, mode):
+    '''
     device = findDevice()
     if device == None:
         print("Device not found")
         return
     print(device.description)
+    '''
 
-    parameters = getParams(userinfo)
+    parameters = getParamData(userinfo)
 
     signalSet = makeSignalSet(mode, parameters)
 
-
+    '''
     with serial.Serial(device.device, 115200) as ser:
         print("Port open?", ser.is_open) #port is open
         print("SignalSet:", signalSet)
@@ -134,11 +154,11 @@ def main(userinfo, mode):
         #print("***Data sent")
         recieveData(ser, signalSet)
         print("***Data recieved")
-
-    print("Port open?", ser.is_open)
+    '''
+    print(signalSet)
 
 with open(r"./data/userpass.json", "r") as f:
     data = json.load(f)
 data = data[0]
 
-
+#main(data, "VOO")

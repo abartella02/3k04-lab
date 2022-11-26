@@ -3,6 +3,7 @@ from helpers import *
 import os
 import serialcomm
 from connectioncheck import main as checkConnected
+import graphData
 
 import tkinter
 from ttkthemes import themed_tk as tk
@@ -59,12 +60,14 @@ def mainPage(userinfo):
     paramFrame = ttk.Frame(paramTab)
 
     optionsFrame = ttk.Frame(paramTab)
-    options = ["Select a mode", "AOO", "VOO", "AAI", "VVI"]
-    value = tkinter.StringVar(optionsFrame)
+    DDoptions = ["Select a mode", "AOO", "VOO", "AAI", "VVI"]
+    DDVal = tkinter.StringVar(optionsFrame)
+
     dropdown = ttk.OptionMenu(optionsFrame, 
-        value,
-        *options
+        DDVal,
+        *DDoptions
         )
+    
     optionsFrame.grid(row=0, column=0, sticky='w')
     dropdown.grid(row=0, column=0, sticky='w')
     paramFrame.grid(row=1, column=0)
@@ -74,32 +77,52 @@ def mainPage(userinfo):
     optionButton = ttk.Button(optionsFrame,
         text="Select",
         command=lambda: (
-            currentMode := value.get(),
+            currentMode := DDVal.get(),
             spawnParams(currentMode, paramFrame, userinfo)
             )
     )
     optionButton.grid(row=0, column=1, sticky='w', ipadx=4)
 
     sendButton = ttk.Button( #send data button
-    mainTab, 
-    text="Send Data to Pacemaker",
-    command=lambda:[
-        messagebox.showinfo("Connect", "Parameters Sent!"),
-        serialcomm.send(userinfo, currentMode)
-    ]
+        mainTab, 
+        text="Send Data to Pacemaker",
+        command=lambda:[
+            serialcomm.sendParams(userinfo, currentMode)
+        ]
     )
     sendButton.grid(row=2, column=0)
 
     getButton = ttk.Button( #send data button
-    mainTab, 
-    text="Get Data from Pacemaker",
-    command=lambda:[
-        messagebox.showinfo("Connect", "Parameters Sent!"),
-        temp := serialcomm.get(userinfo, currentMode),
-        print(json.dumps(temp, indent=1))
-    ]
+        mainTab, 
+        text="Get Data from Pacemaker",
+        command=lambda:[
+            messagebox.showinfo("Connect", "Parameters Recieved!"),
+            temp := serialcomm.getParams(userinfo, currentMode),
+            print(json.dumps(temp, indent=1))
+        ]
     )
     getButton.grid(row=3, column=0)
+
+    GDoptions = ["Select", "Ventricular", "Atrial", "Both"]
+    GDval = tkinter.StringVar(mainTab)   
+    graphOptions = ttk.OptionMenu(mainTab, 
+        GDval,
+        *GDoptions
+        )
+    graphOptions.grid(row=4, column=0)
+
+    graphButton = ttk.Button( 
+        mainTab, 
+        text="Show EGram Graphs",
+        command=lambda:[
+            #serialcomm.get(userinfo, currentMode),
+            graphData.display(str(GDval.get()))
+
+        ]
+    )
+    graphButton.grid(row=4, column=1)
+
+
 
 def spawnParams(currentMode, frame, userinfo):
     clearFrame(frame)
@@ -140,15 +163,15 @@ def spawnParams(currentMode, frame, userinfo):
     
     newdict = parameters.copy()
 
-    applyButton = ttk.Button(frame, #"apply" button at bottom of page
-        text="Apply",
+    saveButton = ttk.Button(frame, #"apply" button at bottom of page
+        text="Save",
         command=lambda: [
             getParamVals(parameters, spin, widgets), #collect values inside spinbox widgets (see otherfuncs.py)
-            print("Parameters Applied"),
+            print("Parameters Saved"),
             updateParams(newdict, userinfo)
             ]
         )
-    applyButton.grid(row=row, column=1, padx=5, pady=5, ipadx=10)
+    saveButton.grid(row=row, column=1, padx=5, pady=5, ipadx=10)
 
 
 def deleteAccount(username):
@@ -326,7 +349,6 @@ def loginPage(): #login page
         style="enter.TButton",
         command= lambda: [
             createNewUser(userBox.get(), passBox.get()),
-            login(userBox.get(), passBox.get())
         ] #new user function call
     )
     
@@ -368,7 +390,7 @@ def main():
     global masterFrame
     global maxUsers
     global theme
-    maxUsers = 2
+    maxUsers = 10
     #create tkinter window instance
     theme = "scidblue"
     root = tk.ThemedTk()
@@ -376,6 +398,10 @@ def main():
     root.title("3K04 app")
     root.iconbitmap(r"./images/menghi.ico")
     style = ttk.Style()
+    root.protocol("WM_DELETE_WINDOW", lambda:[
+        root.destroy(),
+        graphData.close()
+    ])
 
     #create frame to size the window
     masterFrame = ttk.Frame(root)
