@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.99
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Sat Nov 26 03:40:39 2022
+ * C/C++ source code generated on : Sat Nov 26 05:47:22 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -58,8 +58,8 @@ typedef struct {
   real_T VENT_PW;
   real_T ATR_SENSITIVITY;
   real_T VENT_SENSITIVITY;
-  real_T TmpLatchAtATR_SIGNALOutport1;
-  real_T TmpLatchAtVENT_SIGNALOutport1;
+  real_T Gain1;                        /* '<S2>/Gain1' */
+  real_T Gain2;                        /* '<S2>/Gain2' */
   real_T PACING_REF_PWM;               /* '<Root>/eight model stateflow' */
   real_T VENT_SIGNAL;                  /* '<Root>/VENT_SIGNAL' */
   real_T ATR_AMP_REG_f;                /* '<Root>/Serial Communication1' */
@@ -100,14 +100,9 @@ typedef struct {
   uint8_T BytePack11[2];               /* '<S2>/Byte Pack11' */
   uint8_T BytePack12[2];               /* '<S2>/Byte Pack12' */
   uint8_T BytePack13[2];               /* '<S2>/Byte Pack13' */
-  uint8_T BytePack14[8];               /* '<S2>/Byte Pack14' */
-  uint8_T BytePack15[8];               /* '<S2>/Byte Pack15' */
-  uint8_T BytePack16[8];               /* '<S2>/Byte Pack16' */
-  uint8_T BytePack17[8];               /* '<S2>/Byte Pack17' */
-  uint8_T BytePack18[8];               /* '<S2>/Byte Pack18' */
-  uint8_T BytePack19[8];               /* '<S2>/Byte Pack19' */
-  uint8_T BytePack20[8];               /* '<S2>/Byte Pack20' */
-  uint8_T BytePack21[8];               /* '<S2>/Byte Pack21' */
+  uint8_T BytePack22[8];               /* '<S2>/Byte Pack22' */
+  uint8_T BytePack23[8];               /* '<S2>/Byte Pack23' */
+  uint8_T BytePack24[8];               /* '<S2>/Byte Pack24' */
   boolean_T IS_CHARGING;               /* '<Root>/eight model stateflow' */
   boolean_T PACE_CHARGE_CTRL;          /* '<Root>/eight model stateflow' */
   boolean_T Z_ATR_CTRL;                /* '<Root>/eight model stateflow' */
@@ -166,8 +161,17 @@ struct P_Pacemaker_group11_T_ {
   real_T VENT_SIGNAL_SampleTime;       /* Expression: SampleTime
                                         * Referenced by: '<Root>/VENT_SIGNAL'
                                         */
-  real_T empty_Value;                  /* Expression: 0
-                                        * Referenced by: '<S2>/empty'
+  real_T Constant_Value;               /* Expression: 0.5
+                                        * Referenced by: '<S2>/Constant'
+                                        */
+  real_T Gain1_Gain;                   /* Expression: 10
+                                        * Referenced by: '<S2>/Gain1'
+                                        */
+  real_T Gain2_Gain;                   /* Expression: 10
+                                        * Referenced by: '<S2>/Gain2'
+                                        */
+  real_T empty1_Value;                 /* Expression: 0
+                                        * Referenced by: '<S2>/empty1'
                                         */
   real_T Switch_Threshold;             /* Expression: 0
                                         * Referenced by: '<S2>/Switch'
@@ -187,10 +191,10 @@ struct P_Pacemaker_group11_T_ {
   real_T Constant1_Value;              /* Expression: 1
                                         * Referenced by: '<Root>/Constant1'
                                         */
-  real_T Constant_Value;               /* Expression: 3.3
+  real_T Constant_Value_i;             /* Expression: 3.3
                                         * Referenced by: '<Root>/Constant'
                                         */
-  real_T Gain1_Gain;                   /* Expression: 100
+  real_T Gain1_Gain_b;                 /* Expression: 100
                                         * Referenced by: '<Root>/Gain1'
                                         */
   real_T Gain_Gain;                    /* Expression: 100

@@ -187,7 +187,7 @@
       7.0
     ],
     "Default": 3.5,
-    "Value": 3.5
+    "Value": 4.5
   },
   "APulseWidth": {
     "Name": "Atrial Pulse Width",
@@ -303,7 +303,7 @@
       10.0
     ],
     "Default": 2.5,
-    "Value": null
+    "Value": 3.0
   },
   "ARP": {
     "Name": "Atrial Refractory Period",
@@ -391,7 +391,7 @@
       500
     ],
     "Default": 320,
-    "Value": null
+    "Value": 150.0
   },
   "PVARP": {
     "Name": "Post Ventricular Refractory Period",
@@ -502,7 +502,7 @@
       175
     ],
     "Default": 0,
-    "Value": null
+    "Value": 0.0
   },
   "RateSmoothing": {
     "Name": "Rate Smoothing",
@@ -519,6 +519,6 @@
       25
     ],
     "Default": 0,
-    "Value": null
+    "Value": 0.0
   }
 }

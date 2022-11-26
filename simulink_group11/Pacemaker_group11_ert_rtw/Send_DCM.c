@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.99
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Sat Nov 26 03:40:39 2022
+ * C/C++ source code generated on : Sat Nov 26 05:47:22 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -102,14 +102,6 @@ void Send_DCM(void)
 
   /* SignalConversion generated from: '<S2>/RATE_SMOOTHING' */
   Pacemaker_group11_B.RATE_SMOOTHING = Pacemaker_group11_B.RATE_SMOOTHING_d;
-
-  /* SignalConversion generated from: '<S2>/ATR_SIGNAL' */
-  Pacemaker_group11_B.TmpLatchAtATR_SIGNALOutport1 =
-    Pacemaker_group11_B.ATR_SIGNAL;
-
-  /* SignalConversion generated from: '<S2>/VENT_SIGNAL' */
-  Pacemaker_group11_B.TmpLatchAtVENT_SIGNALOutport1 =
-    Pacemaker_group11_B.VENT_SIGNAL;
 
   /* S-Function (any2byte): '<S2>/Byte Pack' */
 
@@ -205,72 +197,41 @@ void Send_DCM(void)
                 &Pacemaker_group11_B.RATE_SMOOTHING,
                 2);
 
-  /* S-Function (any2byte): '<S2>/Byte Pack14' */
+  /* Gain: '<S2>/Gain1' incorporates:
+   *  Constant: '<S2>/Constant'
+   *  SignalConversion generated from: '<S2>/ATR_SIGNAL'
+   *  Sum: '<S2>/Minus'
+   */
+  Pacemaker_group11_B.Gain1 = (Pacemaker_group11_P.Constant_Value -
+    Pacemaker_group11_B.ATR_SIGNAL) * Pacemaker_group11_P.Gain1_Gain;
 
-  /* Pack: <S2>/Byte Pack14 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack14[0],
-                &Pacemaker_group11_B.TmpLatchAtATR_SIGNALOutport1,
+  /* S-Function (any2byte): '<S2>/Byte Pack22' */
+
+  /* Pack: <S2>/Byte Pack22 */
+  (void) memcpy(&Pacemaker_group11_B.BytePack22[0], &Pacemaker_group11_B.Gain1,
                 8);
 
-  /* S-Function (any2byte): '<S2>/Byte Pack15' */
+  /* Gain: '<S2>/Gain2' incorporates:
+   *  Constant: '<S2>/Constant'
+   *  SignalConversion generated from: '<S2>/VENT_SIGNAL'
+   *  Sum: '<S2>/Minus1'
+   */
+  Pacemaker_group11_B.Gain2 = (Pacemaker_group11_P.Constant_Value -
+    Pacemaker_group11_B.VENT_SIGNAL) * Pacemaker_group11_P.Gain2_Gain;
 
-  /* Pack: <S2>/Byte Pack15 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack15[0],
-                &Pacemaker_group11_B.TmpLatchAtVENT_SIGNALOutport1,
+  /* S-Function (any2byte): '<S2>/Byte Pack23' */
+
+  /* Pack: <S2>/Byte Pack23 */
+  (void) memcpy(&Pacemaker_group11_B.BytePack23[0], &Pacemaker_group11_B.Gain2,
                 8);
 
-  /* S-Function (any2byte): '<S2>/Byte Pack16' incorporates:
-   *  Constant: '<S2>/empty'
+  /* S-Function (any2byte): '<S2>/Byte Pack24' incorporates:
+   *  Constant: '<S2>/empty1'
    */
 
-  /* Pack: <S2>/Byte Pack16 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack16[0],
-                &Pacemaker_group11_P.empty_Value,
-                8);
-
-  /* S-Function (any2byte): '<S2>/Byte Pack17' incorporates:
-   *  Constant: '<S2>/empty'
-   */
-
-  /* Pack: <S2>/Byte Pack17 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack17[0],
-                &Pacemaker_group11_P.empty_Value,
-                8);
-
-  /* S-Function (any2byte): '<S2>/Byte Pack18' incorporates:
-   *  Constant: '<S2>/empty'
-   */
-
-  /* Pack: <S2>/Byte Pack18 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack18[0],
-                &Pacemaker_group11_P.empty_Value,
-                8);
-
-  /* S-Function (any2byte): '<S2>/Byte Pack19' incorporates:
-   *  Constant: '<S2>/empty'
-   */
-
-  /* Pack: <S2>/Byte Pack19 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack19[0],
-                &Pacemaker_group11_P.empty_Value,
-                8);
-
-  /* S-Function (any2byte): '<S2>/Byte Pack20' incorporates:
-   *  Constant: '<S2>/empty'
-   */
-
-  /* Pack: <S2>/Byte Pack20 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack20[0],
-                &Pacemaker_group11_P.empty_Value,
-                8);
-
-  /* S-Function (any2byte): '<S2>/Byte Pack21' incorporates:
-   *  Constant: '<S2>/empty'
-   */
-
-  /* Pack: <S2>/Byte Pack21 */
-  (void) memcpy(&Pacemaker_group11_B.BytePack21[0],
-                &Pacemaker_group11_P.empty_Value,
+  /* Pack: <S2>/Byte Pack24 */
+  (void) memcpy(&Pacemaker_group11_B.BytePack24[0],
+                &Pacemaker_group11_P.empty1_Value,
                 8);
 
   /* Switch: '<S2>/Switch' incorporates:
@@ -286,21 +247,21 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[5] = Pacemaker_group11_B.BytePack7[1];
     Pacemaker_group11_B.Switch[7] = Pacemaker_group11_B.BytePack2[1];
   } else {
-    Pacemaker_group11_B.Switch[0] = Pacemaker_group11_B.BytePack14[0];
-    Pacemaker_group11_B.Switch[2] = Pacemaker_group11_B.BytePack14[2];
-    Pacemaker_group11_B.Switch[4] = Pacemaker_group11_B.BytePack14[4];
-    Pacemaker_group11_B.Switch[6] = Pacemaker_group11_B.BytePack14[6];
-    Pacemaker_group11_B.Switch[1] = Pacemaker_group11_B.BytePack14[1];
-    Pacemaker_group11_B.Switch[3] = Pacemaker_group11_B.BytePack14[3];
-    Pacemaker_group11_B.Switch[5] = Pacemaker_group11_B.BytePack14[5];
-    Pacemaker_group11_B.Switch[7] = Pacemaker_group11_B.BytePack14[7];
+    Pacemaker_group11_B.Switch[0] = Pacemaker_group11_B.BytePack22[0];
+    Pacemaker_group11_B.Switch[2] = Pacemaker_group11_B.BytePack22[2];
+    Pacemaker_group11_B.Switch[4] = Pacemaker_group11_B.BytePack22[4];
+    Pacemaker_group11_B.Switch[6] = Pacemaker_group11_B.BytePack22[6];
+    Pacemaker_group11_B.Switch[1] = Pacemaker_group11_B.BytePack22[1];
+    Pacemaker_group11_B.Switch[3] = Pacemaker_group11_B.BytePack22[3];
+    Pacemaker_group11_B.Switch[5] = Pacemaker_group11_B.BytePack22[5];
+    Pacemaker_group11_B.Switch[7] = Pacemaker_group11_B.BytePack22[7];
   }
 
   for (i = 0; i < 6; i++) {
     if (Pacemaker_group11_B.Type > Pacemaker_group11_P.Switch_Threshold) {
       Pacemaker_group11_B.Switch[i + 8] = Pacemaker_group11_B.BytePack2[i + 2];
     } else {
-      Pacemaker_group11_B.Switch[i + 8] = Pacemaker_group11_B.BytePack15[i];
+      Pacemaker_group11_B.Switch[i + 8] = Pacemaker_group11_B.BytePack23[i];
     }
   }
 
@@ -308,15 +269,15 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[14] = Pacemaker_group11_B.BytePack3[0];
     Pacemaker_group11_B.Switch[15] = Pacemaker_group11_B.BytePack3[1];
   } else {
-    Pacemaker_group11_B.Switch[14] = Pacemaker_group11_B.BytePack15[6];
-    Pacemaker_group11_B.Switch[15] = Pacemaker_group11_B.BytePack15[7];
+    Pacemaker_group11_B.Switch[14] = Pacemaker_group11_B.BytePack23[6];
+    Pacemaker_group11_B.Switch[15] = Pacemaker_group11_B.BytePack23[7];
   }
 
   for (i = 0; i < 6; i++) {
     if (Pacemaker_group11_B.Type > Pacemaker_group11_P.Switch_Threshold) {
       Pacemaker_group11_B.Switch[i + 16] = Pacemaker_group11_B.BytePack3[i + 2];
     } else {
-      Pacemaker_group11_B.Switch[i + 16] = Pacemaker_group11_B.BytePack16[i];
+      Pacemaker_group11_B.Switch[i + 16] = Pacemaker_group11_B.BytePack24[i];
     }
   }
 
@@ -324,15 +285,15 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[22] = Pacemaker_group11_B.BytePack4[0];
     Pacemaker_group11_B.Switch[23] = Pacemaker_group11_B.BytePack4[1];
   } else {
-    Pacemaker_group11_B.Switch[22] = Pacemaker_group11_B.BytePack16[6];
-    Pacemaker_group11_B.Switch[23] = Pacemaker_group11_B.BytePack16[7];
+    Pacemaker_group11_B.Switch[22] = Pacemaker_group11_B.BytePack24[6];
+    Pacemaker_group11_B.Switch[23] = Pacemaker_group11_B.BytePack24[7];
   }
 
   for (i = 0; i < 6; i++) {
     if (Pacemaker_group11_B.Type > Pacemaker_group11_P.Switch_Threshold) {
       Pacemaker_group11_B.Switch[i + 24] = Pacemaker_group11_B.BytePack4[i + 2];
     } else {
-      Pacemaker_group11_B.Switch[i + 24] = Pacemaker_group11_B.BytePack17[i];
+      Pacemaker_group11_B.Switch[i + 24] = Pacemaker_group11_B.BytePack24[i];
     }
   }
 
@@ -340,15 +301,15 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[30] = Pacemaker_group11_B.BytePack5[0];
     Pacemaker_group11_B.Switch[31] = Pacemaker_group11_B.BytePack5[1];
   } else {
-    Pacemaker_group11_B.Switch[30] = Pacemaker_group11_B.BytePack17[6];
-    Pacemaker_group11_B.Switch[31] = Pacemaker_group11_B.BytePack17[7];
+    Pacemaker_group11_B.Switch[30] = Pacemaker_group11_B.BytePack24[6];
+    Pacemaker_group11_B.Switch[31] = Pacemaker_group11_B.BytePack24[7];
   }
 
   for (i = 0; i < 6; i++) {
     if (Pacemaker_group11_B.Type > Pacemaker_group11_P.Switch_Threshold) {
       Pacemaker_group11_B.Switch[i + 32] = Pacemaker_group11_B.BytePack5[i + 2];
     } else {
-      Pacemaker_group11_B.Switch[i + 32] = Pacemaker_group11_B.BytePack18[i];
+      Pacemaker_group11_B.Switch[i + 32] = Pacemaker_group11_B.BytePack24[i];
     }
   }
 
@@ -356,15 +317,15 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[38] = Pacemaker_group11_B.BytePack6[0];
     Pacemaker_group11_B.Switch[39] = Pacemaker_group11_B.BytePack6[1];
   } else {
-    Pacemaker_group11_B.Switch[38] = Pacemaker_group11_B.BytePack18[6];
-    Pacemaker_group11_B.Switch[39] = Pacemaker_group11_B.BytePack18[7];
+    Pacemaker_group11_B.Switch[38] = Pacemaker_group11_B.BytePack24[6];
+    Pacemaker_group11_B.Switch[39] = Pacemaker_group11_B.BytePack24[7];
   }
 
   for (i = 0; i < 6; i++) {
     if (Pacemaker_group11_B.Type > Pacemaker_group11_P.Switch_Threshold) {
       Pacemaker_group11_B.Switch[i + 40] = Pacemaker_group11_B.BytePack6[i + 2];
     } else {
-      Pacemaker_group11_B.Switch[i + 40] = Pacemaker_group11_B.BytePack19[i];
+      Pacemaker_group11_B.Switch[i + 40] = Pacemaker_group11_B.BytePack24[i];
     }
   }
 
@@ -372,15 +333,15 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[46] = Pacemaker_group11_B.BytePack8[0];
     Pacemaker_group11_B.Switch[47] = Pacemaker_group11_B.BytePack8[1];
   } else {
-    Pacemaker_group11_B.Switch[46] = Pacemaker_group11_B.BytePack19[6];
-    Pacemaker_group11_B.Switch[47] = Pacemaker_group11_B.BytePack19[7];
+    Pacemaker_group11_B.Switch[46] = Pacemaker_group11_B.BytePack24[6];
+    Pacemaker_group11_B.Switch[47] = Pacemaker_group11_B.BytePack24[7];
   }
 
   for (i = 0; i < 6; i++) {
     if (Pacemaker_group11_B.Type > Pacemaker_group11_P.Switch_Threshold) {
       Pacemaker_group11_B.Switch[i + 48] = Pacemaker_group11_B.BytePack8[i + 2];
     } else {
-      Pacemaker_group11_B.Switch[i + 48] = Pacemaker_group11_B.BytePack20[i];
+      Pacemaker_group11_B.Switch[i + 48] = Pacemaker_group11_B.BytePack24[i];
     }
   }
 
@@ -396,16 +357,16 @@ void Send_DCM(void)
     Pacemaker_group11_B.Switch[61] = Pacemaker_group11_B.BytePack12[1];
     Pacemaker_group11_B.Switch[63] = Pacemaker_group11_B.BytePack13[1];
   } else {
-    Pacemaker_group11_B.Switch[54] = Pacemaker_group11_B.BytePack20[6];
-    Pacemaker_group11_B.Switch[56] = Pacemaker_group11_B.BytePack21[0];
-    Pacemaker_group11_B.Switch[58] = Pacemaker_group11_B.BytePack21[2];
-    Pacemaker_group11_B.Switch[60] = Pacemaker_group11_B.BytePack21[4];
-    Pacemaker_group11_B.Switch[62] = Pacemaker_group11_B.BytePack21[6];
-    Pacemaker_group11_B.Switch[55] = Pacemaker_group11_B.BytePack20[7];
-    Pacemaker_group11_B.Switch[57] = Pacemaker_group11_B.BytePack21[1];
-    Pacemaker_group11_B.Switch[59] = Pacemaker_group11_B.BytePack21[3];
-    Pacemaker_group11_B.Switch[61] = Pacemaker_group11_B.BytePack21[5];
-    Pacemaker_group11_B.Switch[63] = Pacemaker_group11_B.BytePack21[7];
+    Pacemaker_group11_B.Switch[54] = Pacemaker_group11_B.BytePack24[6];
+    Pacemaker_group11_B.Switch[56] = Pacemaker_group11_B.BytePack24[0];
+    Pacemaker_group11_B.Switch[58] = Pacemaker_group11_B.BytePack24[2];
+    Pacemaker_group11_B.Switch[60] = Pacemaker_group11_B.BytePack24[4];
+    Pacemaker_group11_B.Switch[62] = Pacemaker_group11_B.BytePack24[6];
+    Pacemaker_group11_B.Switch[55] = Pacemaker_group11_B.BytePack24[7];
+    Pacemaker_group11_B.Switch[57] = Pacemaker_group11_B.BytePack24[1];
+    Pacemaker_group11_B.Switch[59] = Pacemaker_group11_B.BytePack24[3];
+    Pacemaker_group11_B.Switch[61] = Pacemaker_group11_B.BytePack24[5];
+    Pacemaker_group11_B.Switch[63] = Pacemaker_group11_B.BytePack24[7];
   }
 
   /* End of Switch: '<S2>/Switch' */

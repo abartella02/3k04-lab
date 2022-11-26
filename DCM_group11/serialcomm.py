@@ -81,14 +81,14 @@ def makeSignalSet(mode, parameters):
     paramDict["Mode"] = int(modeNum)
 
     signalSet = struct.pack("H", modeNum)
-    print()
-    print("Mode:", modeNum, "({})".format(mode))
+
+    #print("Mode:", modeNum, "({})".format(mode))
 
     for key in parameters.keys():
         p = parameters[key]
         n = p["Name"]
         val = p["Value"]
-        print(n, val)
+        #print(n, val)
         if  n == "Atrial Pulse Amplitude" or n == "Ventricular Pulse Amplitude" or n == "Atrial Pulse Width" or n == "Ventricular Pulse Width" or n == "Atrial Sensitivity" or n == "Ventricular Sensitivity":
             if val == None:
                 val = 0
@@ -99,7 +99,7 @@ def makeSignalSet(mode, parameters):
                 val = 0
             paramDict[n] = int(val)
             signalSet += struct.pack("H", int(val))
-    print("Length of Signal Set:",len(signalSet))
+    #print("Length of Signal Set:",len(signalSet))
     return signalSet
 
 
@@ -111,7 +111,7 @@ def recieveSignal(userinfo):
     signalSet = makeSignalSet("VOO", getParamData(userinfo))
     try:
         with serial.Serial(findDevice().device, 115200, timeout = 5) as ser:
-            print("enter")
+            #print("enter")
             ser.write(b'\x16' + b'\x33' + signalSet) #start, sync, signal
 
             data = ser.read(64)
@@ -121,9 +121,6 @@ def recieveSignal(userinfo):
 
             atr = float(struct.unpack("d", data[0:8])[0])
             vent = float(struct.unpack("d", data[8:16])[0])
-
-            print(atr)
-            print(vent)
     except:
         print("Signal get timeout")
     return (atr, vent)

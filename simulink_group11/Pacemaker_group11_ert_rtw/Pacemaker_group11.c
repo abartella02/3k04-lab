@@ -9,7 +9,7 @@
  *
  * Model version                  : 1.99
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Sat Nov 26 03:40:39 2022
+ * C/C++ source code generated on : Sat Nov 26 05:47:22 2022
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex
@@ -707,7 +707,7 @@ void Pacemaker_group11_step(void)
   if (Pacemaker_group11_DW.is_active_c1_Pacemaker_group11 == 0U) {
     Pacemaker_group11_DW.is_active_c1_Pacemaker_group11 = 1U;
     Pacemaker_group11_DW.is_c1_Pacemaker_group11 = Pacemaker_group11_IN_Init;
-    Pacemaker_group11_B.MODE_n = 2U;
+    Pacemaker_group11_B.MODE_n = 0U;
     Pacemaker_group11_B.LOWER_RATE_LIMIT_e = 60U;
     Pacemaker_group11_B.UPPER_RATE_LIMIT_g = 120U;
     Pacemaker_group11_B.ATR_AMP_REG_f = 3.5;
@@ -1184,9 +1184,9 @@ void Pacemaker_group11_step(void)
    *  Product: '<Root>/Divide3'
    */
   MW_PWM_SetDutyCycle(Pacemaker_group11_DW.obj_bs.MW_PWM_HANDLE,
-                      Pacemaker_group11_P.Gain1_Gain *
+                      Pacemaker_group11_P.Gain1_Gain_b *
                       (Pacemaker_group11_B.ATR_SENSITIVITY_l /
-                       Pacemaker_group11_P.Constant_Value));
+                       Pacemaker_group11_P.Constant_Value_i));
 
   /* MATLABSystem: '<S3>/PWM Output' incorporates:
    *  Constant: '<Root>/Constant'
@@ -1196,7 +1196,7 @@ void Pacemaker_group11_step(void)
   MW_PWM_SetDutyCycle(Pacemaker_group11_DW.obj_d.MW_PWM_HANDLE,
                       Pacemaker_group11_P.Gain_Gain *
                       (Pacemaker_group11_B.VENT_SENSITIVITY_b /
-                       Pacemaker_group11_P.Constant_Value));
+                       Pacemaker_group11_P.Constant_Value_i));
 }
 
 /* Model initialize function */

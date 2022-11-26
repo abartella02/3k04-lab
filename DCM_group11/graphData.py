@@ -90,5 +90,5 @@ def display(mode, userinfo):
         plot1.subplots(1,2)
     else:
         plot1.subplots(1,1)
-    animatedPlot = FuncAnimation(plot1, partial(animate, mode=mode, userinfo=userinfo), interval=500, blit=False)
+    animatedPlot = FuncAnimation(plot1, partial(animate, mode=mode, userinfo=userinfo), interval=1, blit=False)
     root.mainloop()
