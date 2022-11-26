@@ -30,8 +30,6 @@ def getParamData(userinfo):
 def sendData(ser, signalSet):
     ser.write(b'\x16' + b'\x55' + signalSet)
 
-    messagebox.showinfo("Connect", "Parameters Sent!")
-
 def recieveParams(ser, signalSet):
     print("enter")
     ser.write(b'\x16' + b'\x22' + signalSet) #start, sync, signal
@@ -121,28 +119,35 @@ def recieveSignal(userinfo):
 
             atr = float(struct.unpack("d", data[0:8])[0])
             vent = float(struct.unpack("d", data[8:16])[0])
+        return (atr, vent)
     except:
         print("Signal get timeout")
-    return (atr, vent)
+    return None, None
 
 def sendParams(userinfo, mode):
     signalSet = makeSignalSet(mode, getParamData(userinfo))
     try:
         with serial.Serial(findDevice().device, 115200, timeout=5) as ser:
             sendData(ser, signalSet)
-            print("Data Sent")
+        
+        print("Data Sent")
+        messagebox.showinfo("Send", "Parameters Sent!")
     except:
         print("Data send timeout")
+        messagebox.showwarning("Recieve", "An error occurred while sending data to pacemaker")
 
 def getParams(userinfo, mode):
     signalSet = makeSignalSet(mode, getParamData(userinfo))
     try:
         #print("FIND DEVICE DATA: ", findDevice().description,",", findDevice().serial_number)
         with serial.Serial(findDevice().device, 115200, timeout = 5) as ser:
-            r = recieveParams(ser, signalSet)  
+            r = recieveParams(ser, signalSet)
     except:
         print("Parameter get timeout")
-        r = None
+        messagebox.showwarning("Recieve", "An error occurred while getting data from pacemaker")
+        return None
+        
+    messagebox.showinfo("Recieve", "Parameters Recieved")  
     return r
 
 

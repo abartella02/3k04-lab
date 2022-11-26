@@ -15,7 +15,9 @@ from tkinter import Button, IntVar, ttk,messagebox, font
 
 def mainPage(userinfo):
     clearFrame(masterFrame)
-    root.minsize(330, 320)
+    resizeWindow(root, 330, 320)
+
+    #style.configure('frame1.TFrame', background='green')
 
     notebook = ttk.Notebook(masterFrame) #notebook widget for tabs
     notebook.pack(expand=True, fill='both')
@@ -25,6 +27,7 @@ def mainPage(userinfo):
 
     mainTab = ttk.Frame(notebook) #general tab
     notebook.add(mainTab, text="General")
+    mainTab.grid_columnconfigure(0, weight=1)
 
     #General tab widgets
     statusFrame = ttk.Frame(mainTab)
@@ -53,7 +56,7 @@ def mainPage(userinfo):
         )
     
     #placing widgets on main page
-    statusFrame.grid(row=0, column=0, sticky='NESW')
+    statusFrame.grid(row=0, column=0)
     connectionLabel.grid(row=0, column=0)
     connectionImage.grid(row=0, column=1, ipadx=5, ipady=5, padx=3, pady=3)
 
@@ -83,8 +86,10 @@ def mainPage(userinfo):
         ]
     )
     optionButton.grid(row=0, column=1, sticky='w', ipadx=4)
-
-    ##############
+   
+    connect_data = ttk.Separator(mainTab, orient='horizontal')
+    connect_data.grid(row=2, sticky='ew')
+    ############## CONNECTEDFRAME WIDGETS
 
     sendButton = ttk.Button( #send data button
         connectedFrame, 
@@ -101,32 +106,39 @@ def mainPage(userinfo):
         text="Get Data from Pacemaker",
         command=lambda:[
             print("Get Button Current Mode:", currentMode.get()),
-            messagebox.showinfo("Connect", "Parameters Recieved!"),
             temp := serialcomm.getParams(userinfo, currentMode.get()),
             print("Recieved Data:", json.dumps(temp, indent=1))
         ]
     )
     getButton.grid(row=3, column=0)
 
+    data_graphs = ttk.Separator(connectedFrame, orient='horizontal')
+    data_graphs.grid(row=5, sticky='ew')
+
+
+    ###### GRAPHFRAME WIDGET
+    graphFrame = ttk.Frame(connectedFrame)
+    graphFrame.grid(row=6, column=0)
     GDoptions = ["Select", "Ventricular", "Atrial", "Both"]
-    GDval = tkinter.StringVar(connectedFrame)   
+    GDval = tkinter.StringVar(graphFrame)   
     graphOptions = ttk.OptionMenu(
-        connectedFrame, 
+        graphFrame, 
         GDval,
         *GDoptions
         )
-    graphOptions.grid(row=4, column=0)
+    graphOptions.grid(row=0, column=0)
+    
 
     graphButton = ttk.Button( 
-        connectedFrame, 
+        graphFrame, 
         text="Show EGram Graphs",
         command=lambda:[
             #serialcomm.get(userinfo, currentMode),
-            graphData.display(str(GDval.get()), userinfo)
+            graphData.display(str(GDval.get()), userinfo, graphFrame)
 
         ]
     )
-    graphButton.grid(row=4, column=1)
+    graphButton.grid(row=0, column=1)
 
     #connectedFrame.grid(row=2, column=0)
 
@@ -227,7 +239,8 @@ def maxUsersReached():
     popup.title("Max Users Reached!")
     frame = ttk.Frame(popup)
     frame.pack(anchor='c', fill='both', expand=True)
-    popup.minsize(250, 130)
+    resizeWindow(popup, 250, 130)
+    #popup.minsize(250, 130)
 
     header = ttk.Label(
         frame, 
@@ -370,7 +383,8 @@ def loginPage(): #login page
     loginButton.grid(row=0, column=1, pady=(8, 0), padx=(3,0), ipadx=10)
     create.grid(row=0, column=0, pady=(8, 0), padx=(0,3), ipadx=10)
 
-    root.minsize(300, 210)
+    #root.minsize(300, 210)
+    resizeWindow(root, 300, 210)
 
 def welcome(): #welcome page
     frame = ttk.Frame(masterFrame)
@@ -389,7 +403,8 @@ def welcome(): #welcome page
     subtitleLabel.pack(pady=(0, 5))
     welcomeButton.pack(ipadx=20, pady=(0, 4))
 
-    root.minsize(230, 110)
+    #root.minsize(230, 110)
+    resizeWindow(root, 230, 110)
 
 def main():
     #instantiate global variables
@@ -405,6 +420,7 @@ def main():
     root.set_theme(theme) #fitting themes: breeze, scidblue
     root.title("3K04 app")
     root.iconbitmap(r"./images/menghi.ico")
+
     style = ttk.Style()
     root.protocol("WM_DELETE_WINDOW", lambda:[
         root.destroy(),

@@ -1,28 +1,23 @@
-import serial
-import serial.tools.list_ports as s
+import tkinter
+from ttkthemes import themed_tk as tk
+from tkinter import Button, IntVar, ttk,messagebox, font
 
-def findDevice():
-    ports = s.comports()
-    targetPort = 0
-    for port in ports:
-        #print("Serial Number", port.serial_number)
-        if str(port.serial_number) == "000000123456":
-            print("Serial Device Found")
-            targetPort = port
-            break
-        else:
-            targetPort = 0
-    
-    if targetPort != 0:
-        return "Pacemaker Found"
-    else: 
-        return "Not found"
+root = tk.ThemedTk()
+root.set_theme('scidblue') #fitting themes: breeze, scidblue
+root.title("3K04 app")
 
-class ClassVar:
-    def __init__(self):
-        self.value = 0
-        pass
-    def set(self, val):
-        self.value = val
-    def get(self):
-        return self.value
+root.minsize(200, 200)
+
+notebook = ttk.Notebook(root)
+frame = ttk.Frame(notebook)
+notebook.add(frame, text="tab 1")
+
+l = ttk.Label(frame, text="this is a label")
+l.pack(expand=False, fill='x')
+ttk.Separator(frame, orient='horizontal').pack(expand=False, fill='x')
+
+#frame.pack(expand=True, fill='both')
+notebook.pack(expand=True, fill='both')
+
+
+root.mainloop()

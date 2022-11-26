@@ -18,7 +18,8 @@ def changeButton(button, style, frame):
     if button['text'] == "Connect":
         button.configure(text="Disconnect")
         style.configure('connectionImage.TFrame', background="green")
-        frame.grid(row=2, column=0)
+        frame.grid(row=3, column=0, sticky='ew')
+        frame.grid_columnconfigure(0, weight=1)
     else:
         button.configure(text="Connect")
         style.configure('connectionImage.TFrame', background="red")
@@ -31,6 +32,20 @@ def clearFrame(frame): #clear all existing widgets from tkinter frame
             i.destroy()
     except:
         print('**CLEARFRAME ERROR')
+
+def disableFrame(frame):
+    try:
+        for i in frame.winfo_children(): #iterating through widgets
+            i.config(state="disabled")
+    except:
+        print('**DISABLEFRAME ERROR')
+
+def enableFrame(frame):
+    try:
+        for i in frame.winfo_children(): #iterating through widgets
+            i.config(state="enabled")
+    except:
+        print('**DISABLEFRAME ERROR')
 
 def checkEmptyCredentials(username, password): #check if login info is blank
     if username == '' or password == '':
@@ -63,3 +78,15 @@ def getParamVals(parameters, spin, widgets): #get new parameter values from GUI
 def updateParams(parameters, userinfo):
     with open(userinfo["filepath"], "w") as f: 
         f.write(json.dumps(parameters, indent=2))
+
+def resizeWindow(root, width, height):
+    w_width = root.winfo_width()
+    w_height = root.winfo_height()
+
+    s_width = root.winfo_screenwidth()
+    s_height = root.winfo_screenheight()
+
+    x = s_width//2 - w_width//2
+    y = s_height//2 - w_height//2
+
+    root.geometry("{}x{}+{}+{}".format(width, height, x, y))

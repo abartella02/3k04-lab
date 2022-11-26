@@ -1,6 +1,7 @@
 import tkinter
 from ttkthemes import themed_tk as tk
 from tkinter import Button, IntVar, ttk,messagebox, font
+from helpers import enableFrame, disableFrame
 
 from serialcomm import recieveSignal
 import random
@@ -13,8 +14,8 @@ from functools import partial
 
 def close():
     try:
-        plt.close()
         root.destroy()
+        plt.close()
     except:
         print("Could not close graphData")
 
@@ -45,8 +46,12 @@ def animate(i, mode, userinfo):
     
 
 
-def display(mode, userinfo):
+def display(mode, userinfo, frame):
     mode = mode.lower()
+    if mode == 'select':
+        messagebox.showerror("Graphing", "Select a mode")
+        return 
+
     #mode: "Ventricular", "Atrial", "Both"
     global xPts
     global vPts
@@ -60,11 +65,14 @@ def display(mode, userinfo):
     global root
     global masterFrame
     theme = "scidblue"
-    root = tk.ThemedTk()
-    root.set_theme(theme) #fitting themes: breeze, scidblue
+    #root = tk.ThemedTk()
+    root = tkinter.Toplevel()
+    #root.set_theme(theme) #fitting themes: breeze, scidblue
     root.title("EGram graphs")
     root.iconbitmap(r"./images/menghi.ico")
     style = ttk.Style()
+    #root.grab_set()
+    disableFrame(frame)
 
     #create frame to size the window
     masterFrame = ttk.Frame(root)
@@ -77,6 +85,7 @@ def display(mode, userinfo):
     root.protocol(
         "WM_DELETE_WINDOW", 
         lambda:[
+            enableFrame(frame),
             close()
         ]
     )
