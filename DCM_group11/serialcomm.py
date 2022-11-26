@@ -17,7 +17,8 @@ def findDevice():
         return None
 
     for p in ports:
-        if p.vid == data["Vendor ID"] and p.pid == data["Product ID"]:
+        #print(p.serial_number)
+        if str(p.serial_number) == str(data["Serial Number"]):
             return p
     return None
 
@@ -56,6 +57,8 @@ def recieveParams(ser, signalSet):
     rec["HYS"] = struct.unpack("H", data[60:62])[0]
     rec["RS"] = struct.unpack("H", data[62:64])[0]
     
+    print("Recieved Data\n", json.dumps(rec, indent=1))
+
     if len(rec) != 0:
         messagebox.showinfo("Connect", "Parameters Recieved!")
     else:
@@ -78,13 +81,14 @@ def makeSignalSet(mode, parameters):
     paramDict["Mode"] = int(modeNum)
 
     signalSet = struct.pack("H", modeNum)
-    print("Mode signal Set:", signalSet)
+    print()
+    print("Mode:", modeNum, "({})".format(mode))
 
     for key in parameters.keys():
         p = parameters[key]
         n = p["Name"]
         val = p["Value"]
-        print(n)
+        print(n, val)
         if  n == "Atrial Pulse Amplitude" or n == "Ventricular Pulse Amplitude" or n == "Atrial Pulse Width" or n == "Ventricular Pulse Width" or n == "Atrial Sensitivity" or n == "Ventricular Sensitivity":
             if val == None:
                 val = 0
@@ -103,31 +107,41 @@ def makeSignalSet(mode, parameters):
 
 #########################################################################
 
-def recieveSignal(ser, signalSet):
-    print("enter")
-    ser.write(b'\x16' + b'\x33' + signalSet) #start, sync, signal
+def recieveSignal(userinfo):
+    signalSet = makeSignalSet("VOO", getParamData(userinfo))
+    try:
+        with serial.Serial(findDevice().device, 115200, timeout = 5) as ser:
+            print("enter")
+            ser.write(b'\x16' + b'\x33' + signalSet) #start, sync, signal
 
-    data = ser.read(64)
+            data = ser.read(64)
 
-    atr = None
-    vent = None
+            atr = None
+            vent = None
 
-    atr = struct.unpack("d", data[0:8])[0]
-    vent = struct.unpack("d", data[8:16])[0]
-
+            atr = float(struct.unpack("d", data[0:8])[0])
+            vent = float(struct.unpack("d", data[8:16])[0])
+    except:
+        print("Signal get timeout")
     return (atr, vent)
 
 def sendParams(userinfo, mode):
-    signalSet = makeSignalSet(mode, getParams(userinfo))
-    with serial.Serial(findDevice().device, 115200) as ser:
-        sendData(ser, signalSet)
+    signalSet = makeSignalSet(mode, getParamData(userinfo))
+    try:
+        with serial.Serial(findDevice().device, 115200, timeout=5) as ser:
+            sendData(ser, signalSet)
+            print("Data Sent")
+    except:
+        print("Data send timeout")
 
 def getParams(userinfo, mode):
-    signalSet = makeSignalSet(mode, getParams(userinfo))
+    signalSet = makeSignalSet(mode, getParamData(userinfo))
     try:
+        #print("FIND DEVICE DATA: ", findDevice().description,",", findDevice().serial_number)
         with serial.Serial(findDevice().device, 115200, timeout = 5) as ser:
             r = recieveParams(ser, signalSet)  
     except:
+        print("Parameter get timeout")
         r = None
     return r
 

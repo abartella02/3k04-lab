@@ -28,6 +28,7 @@ def mainPage(userinfo):
 
     #General tab widgets
     statusFrame = ttk.Frame(mainTab)
+    connectedFrame = ttk.Frame(mainTab)
 
     connectionLabel = ttk.Label(statusFrame, text="Connection Status: ")
 
@@ -40,8 +41,8 @@ def mainPage(userinfo):
         text="Connect",
         command=lambda:[
             #messagebox.showinfo("Connect", "{}ion Successful".format(connectButton['text'])),
-            changeButton(connectButton, imageStyle),
-            checkConnected(connectButton, imageStyle),
+            changeButton(connectButton, imageStyle, connectedFrame),
+            checkConnected(connectButton, imageStyle, connectedFrame),
             print("(Dis)Connection Successful")
         ]
         )
@@ -72,55 +73,62 @@ def mainPage(userinfo):
     dropdown.grid(row=0, column=0, sticky='w')
     paramFrame.grid(row=1, column=0)
     
-
-    currentMode = ""
+    currentMode = ClassVar()
     optionButton = ttk.Button(optionsFrame,
         text="Select",
-        command=lambda: (
-            currentMode := DDVal.get(),
-            spawnParams(currentMode, paramFrame, userinfo)
-            )
+        command=lambda: [
+            currentMode.set(DDVal.get()),
+            print("Current mode:", currentMode.get()),
+            spawnParams(currentMode.get(), paramFrame, userinfo)
+        ]
     )
     optionButton.grid(row=0, column=1, sticky='w', ipadx=4)
 
+    ##############
+
     sendButton = ttk.Button( #send data button
-        mainTab, 
+        connectedFrame, 
         text="Send Data to Pacemaker",
         command=lambda:[
-            serialcomm.sendParams(userinfo, currentMode)
+            print("Send Button Current Mode:", currentMode.get()),
+            serialcomm.sendParams(userinfo, currentMode.get())
         ]
     )
     sendButton.grid(row=2, column=0)
 
     getButton = ttk.Button( #send data button
-        mainTab, 
+        connectedFrame, 
         text="Get Data from Pacemaker",
         command=lambda:[
+            print("Get Button Current Mode:", currentMode.get()),
             messagebox.showinfo("Connect", "Parameters Recieved!"),
-            temp := serialcomm.getParams(userinfo, currentMode),
-            print(json.dumps(temp, indent=1))
+            temp := serialcomm.getParams(userinfo, currentMode.get()),
+            print("Recieved Data:", json.dumps(temp, indent=1))
         ]
     )
     getButton.grid(row=3, column=0)
 
     GDoptions = ["Select", "Ventricular", "Atrial", "Both"]
-    GDval = tkinter.StringVar(mainTab)   
-    graphOptions = ttk.OptionMenu(mainTab, 
+    GDval = tkinter.StringVar(connectedFrame)   
+    graphOptions = ttk.OptionMenu(
+        connectedFrame, 
         GDval,
         *GDoptions
         )
     graphOptions.grid(row=4, column=0)
 
     graphButton = ttk.Button( 
-        mainTab, 
+        connectedFrame, 
         text="Show EGram Graphs",
         command=lambda:[
             #serialcomm.get(userinfo, currentMode),
-            graphData.display(str(GDval.get()))
+            graphData.display(str(GDval.get()), userinfo)
 
         ]
     )
     graphButton.grid(row=4, column=1)
+
+    #connectedFrame.grid(row=2, column=0)
 
 
 

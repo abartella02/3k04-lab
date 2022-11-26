@@ -1,11 +1,8 @@
-import threading as T
-import time
-import serialcomm
-
 import tkinter
 from ttkthemes import themed_tk as tk
 from tkinter import Button, IntVar, ttk,messagebox, font
 
+from serialcomm import recieveSignal
 import random
 from itertools import count
 
@@ -21,28 +18,34 @@ def close():
     except:
         print("Could not close graphData")
 
-def animate(i, mode):
+def animate(i, mode, userinfo):
+    (atr, vent) = recieveSignal(userinfo)
     xPts.append(next(index))
-    vPts.append(random.randint(0, 5))
-    aPts.append(random.randint(0, 5))
+    vPts.append(atr)
+    aPts.append(vent)
+    #plt.gcf().set_size_inches(2,2)
     if mode == 'ventricular':
         V_axis = (plt.gcf().get_axes())[0]
     elif mode == 'atrial':
         A_axis = (plt.gcf().get_axes())[0]
     elif mode == 'both':
         V_axis, A_axis = plt.gcf().get_axes()
+        root.geometry("1000x500")
+    
 
     if mode == 'ventricular' or mode == 'both':
         V_axis.cla()
+        V_axis.set(xlabel="time elapsed (s)", ylabel="Ventricle Signal (V)")
         V_axis.plot(xPts, vPts)
     if mode == 'atrial' or mode == 'both':
         A_axis.cla()
+        A_axis.set(xlabel="time elapsed (s)", ylabel="Atrium Signal (V)")
         A_axis.plot(xPts, aPts)
     
     
 
 
-def display(mode):
+def display(mode, userinfo):
     mode = mode.lower()
     #mode: "Ventricular", "Atrial", "Both"
     global xPts
@@ -65,22 +68,27 @@ def display(mode):
 
     #create frame to size the window
     masterFrame = ttk.Frame(root)
-    masterFrame.pack(fill='both', expand=True)
+    #masterFrame.configure(width=300, height=200)
+    masterFrame.pack(fill='both', expand=True, pady=5, padx=5)
     masterFrame.pack_propagate(0)
 
-    root.minsize(700,500)
+    root.geometry("550x500")
 
-    root.protocol("WM_DELETE_WINDOW", lambda:[
-        close()
-    ])
+    root.protocol(
+        "WM_DELETE_WINDOW", 
+        lambda:[
+            close()
+        ]
+    )
 
     plt.style.use("ggplot")
     plot1 = plt.gcf()
     canvas = FigureCanvas(plot1, master=masterFrame)
-    canvas.get_tk_widget().pack()
+    canvas.get_tk_widget().pack(fill='both', expand=True, ipadx=20, ipady=20, padx=10, pady=10)
+
     if mode == 'both':
         plot1.subplots(1,2)
     else:
         plot1.subplots(1,1)
-    animatedPlot = FuncAnimation(plot1, partial(animate, mode=mode), interval=500, blit=False)
+    animatedPlot = FuncAnimation(plot1, partial(animate, mode=mode, userinfo=userinfo), interval=500, blit=False)
     root.mainloop()
