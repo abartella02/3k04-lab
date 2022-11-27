@@ -13,6 +13,17 @@ class ClassVar:
     def get(self):
         return self.value
 
+def getRate(rate):
+    if rate == 1:
+        return 'ms'
+    elif rate == 10:
+        return '1/100 secs'
+    elif rate == 100:
+        return '1/10 secs'
+    elif rate == 1000:
+        return 's'
+    else:
+        return 'cycles'
 
 def changeButton(button, style, frame):
     if button['text'] == "Connect":
@@ -63,7 +74,7 @@ def checkInvalidChars(username):
     return True
 
 
-def getParamVals(parameters, spin, widgets): #get new parameter values from GUI
+def printParamVals(parameters, spin, widgets): #get new parameter values from GUI
     for i in parameters: #iterating through dictionary
         p = parameters[i]
         if p in widgets: #check that parameter is not blank
@@ -76,6 +87,10 @@ def getParamVals(parameters, spin, widgets): #get new parameter values from GUI
             print(p["Name"], p["Value"])
 
 def updateParams(parameters, userinfo):
+    #print(json.dumps(parameters, indent=1))
+    if parameters["UpperRateLimit"]["Value"] < parameters["LowerRateLimit"]["Value"]:
+        messagebox.showwarning("Invalid Parameters", "Error: LRL cannot be greater then URL")
+        return
     with open(userinfo["filepath"], "w") as f: 
         f.write(json.dumps(parameters, indent=2))
 
@@ -89,4 +104,5 @@ def resizeWindow(root, width, height):
     x = s_width//2 - w_width//2
     y = s_height//2 - w_height//2
 
-    root.geometry("{}x{}+{}+{}".format(width, height, x, y))
+    root.geometry("{}x{}".format(width, height))
+    root.minsize(width, height)
