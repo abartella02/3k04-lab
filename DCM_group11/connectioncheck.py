@@ -31,13 +31,13 @@ def findDevice():
             break
         else:
             targetPort = 0
-    ''' #TEMPORARILY COMMENTED!!!!
+     #TEMPORARILY COMMENTED!!!!
     if targetPort != 0:
         return 1
     else: 
         return None
-    '''
-    return 1
+    
+    return None
 
 
 def main(button, style, frame):

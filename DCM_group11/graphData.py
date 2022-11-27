@@ -20,9 +20,9 @@ def close():
         print("Could not close graphData")
 
 def animate(i, mode, userinfo):
-    #(atr, vent) = recieveSignal(userinfo)
-    atr = random.randint(0,5) ##############TEMPORARY
-    vent = random.randint(0, 5)
+    (atr, vent) = recieveSignal(userinfo)
+    #atr = random.randint(0,5) ##############TEMPORARY
+    #vent = random.randint(0, 5)
     xPts.append(next(index))
     if len(xPts)> maxlength:
         xPts.pop(0)
