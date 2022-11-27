@@ -15,7 +15,7 @@ from tkinter import Button, IntVar, ttk,messagebox, font
 
 def mainPage(userinfo):
     clearFrame(masterFrame)
-    resizeWindow(root, 330, 320)
+    resizeWindow(root, 390, 400)
 
     #style.configure('frame1.TFrame', background='green')
 
@@ -88,21 +88,27 @@ def mainPage(userinfo):
     optionButton.grid(row=0, column=1, sticky='w', ipadx=4)
    
     connect_data = ttk.Separator(mainTab, orient='horizontal')
-    connect_data.grid(row=2, sticky='ew')
+    connect_data.grid(row=2, sticky='ew', pady=10)
     ############## CONNECTEDFRAME WIDGETS
 
+    graphLabel = ttk.Label(connectedFrame, text="Send/Receive Parameters", font=('Calibri', '12'))
+    graphLabel.grid(row=0, column=0, pady=(0, 2), padx=10, columnspan=1)
+
+    connectedSubFrame = ttk.Frame(connectedFrame)
+    connectedSubFrame.grid(row=1, column=0)
+
     sendButton = ttk.Button( #send data button
-        connectedFrame, 
+        connectedSubFrame, 
         text="Send Data to Pacemaker",
         command=lambda:[
             print("Send Button Current Mode:", currentMode.get()),
             serialcomm.sendParams(userinfo, currentMode.get())
         ]
     )
-    sendButton.grid(row=2, column=0)
+    sendButton.grid(row=2, column=0, padx=(0, 5))
 
     getButton = ttk.Button( #send data button
-        connectedFrame, 
+        connectedSubFrame, 
         text="Get Data from Pacemaker",
         command=lambda:[
             print("Get Button Current Mode:", currentMode.get()),
@@ -110,15 +116,21 @@ def mainPage(userinfo):
             print("Recieved Data:", json.dumps(temp, indent=1))
         ]
     )
-    getButton.grid(row=3, column=0)
+    getButton.grid(row=2, column=1)
 
     data_graphs = ttk.Separator(connectedFrame, orient='horizontal')
-    data_graphs.grid(row=5, sticky='ew')
+    data_graphs.grid(row=5, sticky='ew', pady=10)
 
 
     ###### GRAPHFRAME WIDGET
     graphFrame = ttk.Frame(connectedFrame)
     graphFrame.grid(row=6, column=0)
+    graphFrame.grid_columnconfigure(0, weight=1)
+
+    graphLabel = ttk.Label(graphFrame, text="EGram & Graphing", font=('Calibri', '12'))
+    graphLabel.grid(row=0, column=0, pady=(0, 2), padx=10, columnspan=2)
+    
+
     GDoptions = ["Select", "Ventricular", "Atrial", "Both"]
     GDval = tkinter.StringVar(graphFrame)   
     graphOptions = ttk.OptionMenu(
@@ -126,7 +138,7 @@ def mainPage(userinfo):
         GDval,
         *GDoptions
         )
-    graphOptions.grid(row=0, column=0)
+    graphOptions.grid(row=1, column=0, padx=(0, 1))
     
 
     graphButton = ttk.Button( 
@@ -138,7 +150,7 @@ def mainPage(userinfo):
 
         ]
     )
-    graphButton.grid(row=0, column=1)
+    graphButton.grid(row=1, column=1)
 
     #connectedFrame.grid(row=2, column=0)
 
@@ -186,8 +198,8 @@ def spawnParams(currentMode, frame, userinfo):
     saveButton = ttk.Button(frame, #"apply" button at bottom of page
         text="Save",
         command=lambda: [
-            getParamVals(parameters, spin, widgets), #collect values inside spinbox widgets (see otherfuncs.py)
-            print("Parameters Saved"),
+            printParamVals(parameters, spin, widgets), #collect values inside spinbox widgets (see otherfuncs.py)
+            print("Parameters Saved in {} mode".format(currentMode)),
             updateParams(newdict, userinfo)
             ]
         )

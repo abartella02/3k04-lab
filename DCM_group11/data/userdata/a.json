@@ -63,7 +63,7 @@
       175
     ],
     "Default": 60,
-    "Value": 60.0
+    "Value": null
   },
   "UpperRateLimit": {
     "Name": "Upper Rate Limit",
@@ -97,7 +97,7 @@
       175
     ],
     "Default": 120,
-    "Value": 120.0
+    "Value": null
   },
   "APulseAmplitude": {
     "Name": "Atrial Pulse Amplitude",
@@ -187,7 +187,7 @@
       7.0
     ],
     "Default": 3.5,
-    "Value": 4.5
+    "Value": null
   },
   "APulseWidth": {
     "Name": "Atrial Pulse Width",
@@ -243,7 +243,7 @@
       1.9
     ],
     "Default": 0.4,
-    "Value": 0.4
+    "Value": null
   },
   "ASensitivity": {
     "Name": "Atrial Sensitivity",
@@ -303,7 +303,7 @@
       10.0
     ],
     "Default": 2.5,
-    "Value": 3.0
+    "Value": null
   },
   "ARP": {
     "Name": "Atrial Refractory Period",
@@ -391,7 +391,7 @@
       500
     ],
     "Default": 320,
-    "Value": 150.0
+    "Value": null
   },
   "PVARP": {
     "Name": "Post Ventricular Refractory Period",
@@ -502,7 +502,7 @@
       175
     ],
     "Default": 0,
-    "Value": 0.0
+    "Value": null
   },
   "RateSmoothing": {
     "Name": "Rate Smoothing",
@@ -519,6 +519,6 @@
       25
     ],
     "Default": 0,
-    "Value": 0.0
+    "Value": null
   }
 }

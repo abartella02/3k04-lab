@@ -13,5 +13,10 @@
     "username": "w",
     "password": "w",
     "filepath": "./data/userdata/w.json"
+  },
+  {
+    "username": "a",
+    "password": "a",
+    "filepath": "./data/userdata/a.json"
   }
 ]
