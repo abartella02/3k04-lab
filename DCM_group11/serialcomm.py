@@ -39,21 +39,21 @@ def recieveParams(ser, signalSet):
     data = ser.read(64)
     print("read end")
     rec["MODE"] = struct.unpack("H", data[0:2])[0]
-    rec["LRL"] = struct.unpack("H", data[2:4])[0]
-    rec["URL"] = struct.unpack("H", data[4:6])[0]
+    rec["LowerRateLimit"] = struct.unpack("H", data[2:4])[0]
+    rec["UpperRateLimit"] = struct.unpack("H", data[4:6])[0]
 
-    rec["AA"] = struct.unpack("d", data[6:14])[0]
-    rec["VA"] = struct.unpack("d", data[14:22])[0]
-    rec["APW"] = struct.unpack("d", data[22:30])[0]
-    rec["VPW"] = struct.unpack("d", data[30:38])[0]
-    rec["AS"] = struct.unpack("d", data[38:46])[0]
-    rec["VS"] = struct.unpack("d", data[46:54])[0]
+    rec["APulseAmplitude"] = struct.unpack("d", data[6:14])[0]
+    rec["VPulseAmplitude"] = struct.unpack("d", data[14:22])[0]
+    rec["APulseWidth"] = struct.unpack("d", data[22:30])[0]
+    rec["VPulseWidth"] = struct.unpack("d", data[30:38])[0]
+    rec["ASensitivity"] = struct.unpack("d", data[38:46])[0]
+    rec["VSensitivity"] = struct.unpack("d", data[46:54])[0]
 
     rec["VRP"] = struct.unpack("H", data[54:56])[0]
     rec["ARP"] = struct.unpack("H", data[56:58])[0]
     rec["PVARP"] = struct.unpack("H", data[58:60])[0]
-    rec["HYS"] = struct.unpack("H", data[60:62])[0]
-    rec["RS"] = struct.unpack("H", data[62:64])[0]
+    rec["Hysterisis"] = struct.unpack("H", data[60:62])[0]
+    rec["RateSmoothing"] = struct.unpack("H", data[62:64])[0]
     
     print("Recieved Data\n", json.dumps(rec, indent=1))
 
@@ -146,8 +146,19 @@ def getParams(userinfo, mode):
         print("Parameter get timeout")
         messagebox.showwarning("Recieve", "An error occurred while getting data from pacemaker")
         return None
-        
-    messagebox.showinfo("Recieve", "Parameters Recieved")  
+    
+    try:
+        with open(userinfo['filepath'], 'r') as f:
+            params = json.load(f)
+            for name in params.keys():
+                params[name]['Value'] = r[name]
+            print('parameters loaded')
+    except:
+        print('parameters not loaded')
+
+
+    messagebox.showinfo("Recieve", "Parameters Recieved")
+    
     return r
 
 
@@ -176,8 +187,8 @@ def main(userinfo, mode):
     '''
     print(signalSet)
 
-with open(r"./data/userpass.json", "r") as f:
+'''with open(r"./data/userpass.json", "r") as f:
     data = json.load(f)
-data = data[0]
+data = data[0]'''
 
 #main(data, "VOO")
